@@ -2,6 +2,7 @@ package parsers.xml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,14 +14,14 @@ public abstract class AXMLNode<T extends AXMLNode<T>> {
     private T parent;
     private final String name;
     private final Map<String, String> attributes;
-    private final ArrayList<T> children;
+    private final List<T> children;
     private final StringBuilder text;
 
     AXMLNode(String name) {
         this(name, new HashMap<>(), new ArrayList<>());
     }
 
-    AXMLNode(String name, Map<String, String> attributes, ArrayList<T> children) {
+    AXMLNode(String name, Map<String, String> attributes, List<T> children) {
         this.parent = null;
         this.name = name;
         this.attributes = attributes;
@@ -53,7 +54,7 @@ public abstract class AXMLNode<T extends AXMLNode<T>> {
         this.text.append(text);
     }
 
-    public final ArrayList<T> getChildren() {
+    public final List<T> getChildren() {
         return children;
     }
 
