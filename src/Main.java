@@ -12,7 +12,8 @@ public class Main {
         System.out.println(plus);
         System.out.println(new Skip());
         System.out.println(plus.accept(new SMTFormatter()));
-        System.out.println(equals.accept(new SMTFormatter()));*/
+        System.out.println(equals.accept(new SMTFormatter()));
+        Context context = new Context();*/
     }
 
 }
