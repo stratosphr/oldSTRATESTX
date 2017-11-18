@@ -1,17 +1,17 @@
-package lang.exprs.bool;
+package lang.maths.defs;
 
-import lang.exprs.arith.AArithExpr;
+import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
- * Created by gvoiron on 16/11/17.
- * Time : 21:16
+ * Created by gvoiron on 18/11/17.
+ * Time : 17:17
  */
-public final class Equals extends ANaryBoolExpr<AArithExpr> {
+public final class VarDef extends ADef {
 
-    public Equals(AArithExpr... operands) {
-        super(operands);
+    public VarDef(String name, ASetExpr domain) {
+        super(name, domain);
     }
 
     @Override

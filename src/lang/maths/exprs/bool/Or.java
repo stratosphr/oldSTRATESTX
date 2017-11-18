@@ -1,15 +1,15 @@
-package lang.exprs.arith;
+package lang.maths.exprs.bool;
 
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
- * Created by gvoiron on 16/11/17.
- * Time : 21:44
+ * Created by gvoiron on 17/11/17.
+ * Time : 12:50
  */
-public final class Div extends ANaryArithExpr<AArithExpr> {
+public final class Or extends ANaryBoolExpr<ABoolExpr> {
 
-    public Div(AArithExpr... operands) {
+    public Or(ABoolExpr... operands) {
         super(operands);
     }
 

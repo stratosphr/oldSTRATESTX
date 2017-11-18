@@ -1,19 +1,33 @@
+import lang.maths.defs.DefsContext;
+import lang.maths.defs.FunDef;
+import lang.maths.defs.VarDef;
+import lang.maths.exprs.arith.Fun;
+import lang.maths.exprs.arith.Int;
+import lang.maths.exprs.arith.Var;
+import lang.maths.exprs.bool.ABoolExpr;
+import lang.maths.exprs.bool.Equals;
+import lang.maths.exprs.set.Set;
+import solvers.z3.Z3;
+import solvers.z3.Z3Result;
+
 public class Main {
 
+    // TODO : HANDLE OR AND AND LOGICAL OPERATORS WITH NO PARAMETERS IN SMTFormatter
     public static void main(String[] args) {
-        /*Equals equals = new Equals(new Int(42), new Plus(new Int(2), new Int(40)));
-        Plus plus = new Plus(
-                new Plus(new Int(0), new Int(1), new Var("var")),
-                new Times(new Plus(new Int(3), new Int(4)), new Div(new Int(3), new Minus(new Int(7), new Int(4)))),
-                new Div(new Int(4), new Times(new Int(2), new Int(42), new Div(new Int(4), new Int(7), new Int(9), new Times(new Int(4), new Int(25))))),
-                new Minus(new Mod(new Var("var"), new Div(new Int(50), new Mod(new Int(50), new Minus(new Int(10), new Int(50))))), new Int(42))
-        );
-        System.out.println(equals);
-        System.out.println(plus);
-        System.out.println(new Skip());
-        System.out.println(plus.accept(new SMTFormatter()));
-        System.out.println(equals.accept(new SMTFormatter()));
-        Context context = new Context();*/
+        Var var0 = new Var("var0");
+        Var var1 = new Var("var1");
+        Fun fun0_0 = new Fun("fun0", new Int(0));
+        Fun fun1_0 = new Fun("fun1", new Int(0));
+        DefsContext defsContext = new DefsContext();
+        defsContext.addDef(new VarDef(var0.getName(), new Set(new Int(1), new Int(-1))));
+        defsContext.addDef(new VarDef(var1.getName(), new Set(new Int(1))));
+        defsContext.addDef(new FunDef(fun0_0.getName(), new Set(new Int(0), new Int(1), new Int(2)), new Set(new Int(0), new Int(2), new Int(2))));
+        defsContext.addDef(new FunDef(fun1_0.getName(), new Set(new Int(0), new Int(1), new Int(3)), new Set(new Int(1), new Int(2))));
+        ABoolExpr expr = new Equals(fun0_0, var0);
+        Z3Result result = Z3.checkSAT(expr, defsContext);
+        if (result.isSAT()) {
+            System.out.println(result.getModel());
+        }
     }
 
 }

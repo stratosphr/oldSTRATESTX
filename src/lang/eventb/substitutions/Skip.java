@@ -6,7 +6,7 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 17/11/17.
  * Time : 00:27
  */
-public class Skip extends ASubstitution {
+public final class Skip extends ASubstitution {
 
     @Override
     public String accept(IObjectFormatter formatter) {

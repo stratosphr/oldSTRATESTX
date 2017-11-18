@@ -1,4 +1,4 @@
-package lang.exprs.arith;
+package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
@@ -7,9 +7,9 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 16/11/17.
  * Time : 21:44
  */
-public final class Times extends ANaryArithExpr<AArithExpr> {
+public final class Plus extends ANaryArithExpr<AArithExpr> {
 
-    public Times(AArithExpr... operands) {
+    public Plus(AArithExpr... operands) {
         super(operands);
     }
 

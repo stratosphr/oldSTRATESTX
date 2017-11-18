@@ -1,22 +1,16 @@
-package lang.exprs.arith;
+package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
  * Created by gvoiron on 16/11/17.
- * Time : 21:14
+ * Time : 21:44
  */
-public final class Int extends AArithExpr {
+public final class Div extends ANaryArithExpr<AArithExpr> {
 
-    private final Integer value;
-
-    public Int(int value) {
-        this.value = value;
-    }
-
-    public Integer getValue() {
-        return value;
+    public Div(AArithExpr... operands) {
+        super(operands);
     }
 
     @Override

@@ -1,22 +1,16 @@
-package lang.exprs.arith;
+package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
  * Created by gvoiron on 16/11/17.
- * Time : 21:52
+ * Time : 21:44
  */
-public final class Var extends AArithExpr {
+public final class Mod extends ANaryArithExpr<AArithExpr> {
 
-    private final String name;
-
-    public Var(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public Mod(AArithExpr... operands) {
+        super(operands);
     }
 
     @Override

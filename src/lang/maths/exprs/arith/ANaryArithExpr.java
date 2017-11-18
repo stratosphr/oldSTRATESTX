@@ -1,15 +1,19 @@
-package lang.exprs.arith;
+package lang.maths.exprs.arith;
 
-import lang.exprs.AExpr;
+import lang.maths.defs.DefsContext;
+import lang.maths.exprs.AGenericTypeExpr;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by gvoiron on 16/11/17.
  * Time : 21:44
  */
-abstract class ANaryArithExpr<T extends AExpr> extends AArithExpr {
+abstract class ANaryArithExpr<T extends AGenericTypeExpr> extends AArithExpr {
 
     private final List<T> operands;
 
@@ -22,6 +26,11 @@ abstract class ANaryArithExpr<T extends AExpr> extends AArithExpr {
 
     public List<T> getOperands() {
         return operands;
+    }
+
+    @Override
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

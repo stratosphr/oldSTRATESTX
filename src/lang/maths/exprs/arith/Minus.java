@@ -1,4 +1,4 @@
-package lang.exprs.arith;
+package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
