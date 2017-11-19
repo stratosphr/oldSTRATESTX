@@ -1,5 +1,6 @@
 package lang.maths.exprs.arith;
 
+import lang.AObject;
 import lang.maths.defs.DefsContext;
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
@@ -33,6 +34,11 @@ public final class Int extends AValue {
 
     public Integer getValue() {
         return value;
+    }
+
+    @Override
+    public int compareTo(AObject object) {
+        return getValue().compareTo(((Int) object).getValue());
     }
 
 }

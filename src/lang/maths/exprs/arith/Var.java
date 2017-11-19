@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
  * Created by gvoiron on 16/11/17.
  * Time : 21:52
  */
-public final class Var extends AArithExpr {
+public final class Var extends AAssignable {
 
     private final String name;
 

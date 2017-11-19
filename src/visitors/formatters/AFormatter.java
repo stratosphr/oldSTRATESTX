@@ -30,6 +30,10 @@ abstract class AFormatter {
         return String.join("", Collections.nCopies(indentation, "\t")) + text;
     }
 
+    String line() {
+        return line("");
+    }
+
     String line(String line) {
         return line + "\n";
     }

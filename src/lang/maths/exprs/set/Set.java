@@ -4,7 +4,7 @@ import lang.maths.exprs.arith.AValue;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.TreeSet;
 
 /**
  * Created by gvoiron on 18/11/17.
@@ -12,10 +12,10 @@ import java.util.LinkedHashSet;
  */
 public final class Set extends ASetExpr {
 
-    private LinkedHashSet<AValue> elements;
+    private TreeSet<AValue> elements;
 
     public Set(AValue... elements) {
-        this.elements = new LinkedHashSet<>(Arrays.asList(elements));
+        this.elements = new TreeSet<>(Arrays.asList(elements));
     }
 
     @Override
@@ -24,7 +24,7 @@ public final class Set extends ASetExpr {
     }
 
     @Override
-    public LinkedHashSet<AValue> getElements() {
+    public TreeSet<AValue> getElements() {
         return elements;
     }
 

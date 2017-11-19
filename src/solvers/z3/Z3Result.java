@@ -13,10 +13,10 @@ public final class Z3Result {
     private final Status status;
     private final Model model;
 
-    Z3Result(ABoolExpr expr, Status status, com.microsoft.z3.Model model) {
+    Z3Result(ABoolExpr expr, Status status, Model model) {
         this.expr = expr;
         this.status = status;
-        this.model = new Model(model);
+        this.model = model;
     }
 
     public boolean isSAT() {

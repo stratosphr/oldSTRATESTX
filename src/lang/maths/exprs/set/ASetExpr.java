@@ -3,7 +3,7 @@ package lang.maths.exprs.set;
 import lang.maths.exprs.AExpr;
 import lang.maths.exprs.arith.AValue;
 
-import java.util.LinkedHashSet;
+import java.util.TreeSet;
 
 /**
  * Created by gvoiron on 18/11/17.
@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
  */
 public abstract class ASetExpr extends AExpr {
 
-    public abstract LinkedHashSet<AValue> getElements();
+    public abstract TreeSet<AValue> getElements();
 
     public final int getCard() {
         return getElements().size();

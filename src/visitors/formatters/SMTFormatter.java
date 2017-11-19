@@ -3,7 +3,6 @@ package visitors.formatters;
 import lang.maths.defs.DefsContext;
 import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
-import lang.maths.exprs.AGenericTypeExpr;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
 import visitors.formatters.interfaces.IGenericExprFormattable;
@@ -17,12 +16,10 @@ import java.util.stream.Collectors;
  */
 public final class SMTFormatter extends IGenericExprFormatter {
 
-    private DefsContext defsContext;
-    private int foldingLimit;
-    private LinkedHashSet<VarDef> varsDefs;
-    private LinkedHashSet<FunDef> funsDefs;
+    private final DefsContext defsContext;
+    private final int foldingLimit;
+    private final LinkedHashSet<Fun> funs;
     private boolean isVisitingBoolExpr;
-    private boolean isVisitingArithITE;
 
     public SMTFormatter(DefsContext defsContext) {
         this(defsContext, 80);
@@ -31,10 +28,8 @@ public final class SMTFormatter extends IGenericExprFormatter {
     private SMTFormatter(DefsContext defsContext, int foldingLimit) {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
-        this.varsDefs = new LinkedHashSet<>();
-        this.funsDefs = new LinkedHashSet<>();
+        this.funs = new LinkedHashSet<>();
         this.isVisitingBoolExpr = false;
-        this.isVisitingArithITE = false;
     }
 
     private String fold(String formatted) {
@@ -45,21 +40,26 @@ public final class SMTFormatter extends IGenericExprFormatter {
     }
 
     private String formatArithExpr(String formatted) {
-        return !isVisitingArithITE || isVisitingBoolExpr ? formatted : ";" + formatted.replaceAll("\t[(]", "\t;(").replaceAll("[)]$", ";)").replaceAll("\t[)]", "\t;)");
+        return formatted;
     }
 
-    private String formatBoolExpr(AGenericTypeExpr expr, String operator, List<? extends IGenericExprFormattable> operands) {
+    private String formatBoolExpr(String operator, List<? extends IGenericExprFormattable> operands) {
         boolean wasVisitingBoolExpr = isVisitingBoolExpr;
         if (!isVisitingBoolExpr) {
             isVisitingBoolExpr = true;
         }
-        String formatted = line("(" + operator) + indentRight() + operands.stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")");
+        String formatted = operands.isEmpty() ? operator : line("(" + operator) + indentRight() + operands.stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")");
         if (!wasVisitingBoolExpr) {
             String oldFormatted = formatted;
-            formatted = line(varsDefs.stream().map(varDef -> line(varDef.accept(this))).collect(Collectors.joining()));
-            formatted += line(funsDefs.stream().map(funDef -> line(funDef.accept(this))).collect(Collectors.joining()));
-            formatted += "(assert " + new And(varsDefs.stream().map(varDef -> new In(new Var(varDef.getName()), varDef.getDomain())).toArray(ABoolExpr[]::new)).accept(this) + ")";
-            //line(varsDefs.stream().map(varDef -> line("(assert " + new In(new Var(varDef.getName()), varDef.getDomain()).accept(this) + ")")).collect(Collectors.joining()));
+            formatted = defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
+            formatted += line();
+            formatted += line("(assert " + new And(
+                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new In(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
+                    new And(funs.stream().map(fun -> new In(fun.getParameter(), defsContext.getDef(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
+            ).accept(this) + ")");
+            formatted += line();
+            formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
+            formatted += line();
             formatted += "(assert " + oldFormatted + ")";
         }
         return formatted;
@@ -67,7 +67,7 @@ public final class SMTFormatter extends IGenericExprFormatter {
 
     @Override
     public String visit(VarDef varDef) {
-        return fold("(declare-fun " + varDef.getName() + " () Int)");
+        return "(declare-fun " + varDef.getName() + " () Int)";
     }
 
     @Override
@@ -85,7 +85,7 @@ public final class SMTFormatter extends IGenericExprFormatter {
         }
         formatted += indentLine(arithITE.accept(this));
         formatted += indentLeft() + ")";
-        return fold(formatted);
+        return formatted;
     }
 
     @Override
@@ -100,16 +100,12 @@ public final class SMTFormatter extends IGenericExprFormatter {
 
     @Override
     public String visit(Var var) {
-        if (!var.getName().contains("!")) {
-            varsDefs.add(defsContext.getDef(var));
-        }
         return formatArithExpr(var.getName());
     }
 
     @Override
     public String visit(Fun fun) {
-        fun.getVars(defsContext).forEach(var -> varsDefs.add(defsContext.getDef(var)));
-        funsDefs.add(defsContext.getDef(fun));
+        funs.add(fun);
         return fold(formatArithExpr("(" + fun.getName() + " " + fun.getParameter().accept(this) + ")"));
     }
 
@@ -140,25 +136,22 @@ public final class SMTFormatter extends IGenericExprFormatter {
 
     @Override
     public String visit(ArithITE arithITE) {
-        isVisitingArithITE = true;
-        String formatted = formatArithExpr(line("(ite") + indentRight() + indentLine(arithITE.getCondition().accept(this)) + indentLine(arithITE.getThenPart().accept(this)) + indentLine(arithITE.getElsePart().accept(this)) + indentLeft() + indent(")"));
-        isVisitingArithITE = false;
-        return formatted;
+        return formatArithExpr(line("(ite") + indentRight() + indentLine(arithITE.getCondition().accept(this)) + indentLine(arithITE.getThenPart().accept(this)) + indentLine(arithITE.getElsePart().accept(this)) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(Or or) {
-        return fold(formatBoolExpr(or, "or", or.getOperands()));
+        return fold(formatBoolExpr("or", or.getOperands()));
     }
 
     @Override
     public String visit(And and) {
-        return fold(formatBoolExpr(and, "and", and.getOperands()));
+        return fold(formatBoolExpr("and", and.getOperands()));
     }
 
     @Override
     public String visit(Equals equals) {
-        return fold(formatBoolExpr(equals, "=", equals.getOperands()));
+        return fold(formatBoolExpr("=", equals.getOperands()));
     }
 
     @Override

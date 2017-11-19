@@ -21,14 +21,13 @@ public final class Z3 {
         solver.reset();
         String formattedExpr = expr.accept(new SMTFormatter(defsContext));
         try {
-            System.out.println(formattedExpr);
             BoolExpr assertion = context.parseSMTLIB2String(formattedExpr, null, null, null, null);
             solver.add(assertion);
         } catch (Z3Exception exception) {
             throw new Error(exception + "\nError while parsing the following code:\n" + formattedExpr);
         }
         Status status = solver.check();
-        return new Z3Result(expr, status, status == Status.SATISFIABLE ? solver.getModel() : null);
+        return new Z3Result(expr, status, status == Status.SATISFIABLE ? new Model(solver.getModel(), context, defsContext) : null);
     }
 
 }
