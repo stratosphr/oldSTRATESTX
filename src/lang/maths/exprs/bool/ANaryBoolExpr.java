@@ -27,7 +27,7 @@ public abstract class ANaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExp
     }
 
     @Override
-    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

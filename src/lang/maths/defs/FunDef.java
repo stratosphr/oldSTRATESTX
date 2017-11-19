@@ -1,5 +1,6 @@
 package lang.maths.defs;
 
+import lang.maths.exprs.set.AFiniteSetExpr;
 import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
@@ -8,11 +9,11 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 18/11/17.
  * Time : 16:52
  */
-public final class FunDef extends ADef {
+public final class FunDef extends ADef<AFiniteSetExpr> {
 
     private final ASetExpr coDomain;
 
-    public FunDef(String name, ASetExpr domain, ASetExpr coDomain) {
+    public FunDef(String name, AFiniteSetExpr domain, ASetExpr coDomain) {
         super(name, domain);
         if (coDomain.isEmpty()) {
             throw new Error("Error: the co-domain of \"" + name + "\" cannot be empty.");
@@ -28,6 +29,11 @@ public final class FunDef extends ADef {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public AFiniteSetExpr getDomain() {
+        return domain;
     }
 
     public ASetExpr getCoDomain() {

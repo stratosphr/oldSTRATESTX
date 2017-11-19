@@ -8,14 +8,14 @@ import visitors.formatters.interfaces.IGenericExprFormattable;
  * Created by gvoiron on 18/11/17.
  * Time : 17:18
  */
-public abstract class ADef extends AObject implements IGenericExprFormattable {
+public abstract class ADef<Domain extends ASetExpr> extends AObject implements IGenericExprFormattable {
 
     private final String name;
-    private final ASetExpr domain;
+    final Domain domain;
 
-    ADef(String name, ASetExpr domain) {
+    ADef(String name, Domain domain) {
         if (domain.isEmpty()) {
-            throw new Error("Error: the definition domain of \"" + name + "\" cannot be empty.");
+            throw new Error("Error: the domain of \"" + name + "\" cannot be empty.");
         }
         this.name = name;
         this.domain = domain;
@@ -25,7 +25,7 @@ public abstract class ADef extends AObject implements IGenericExprFormattable {
         return name;
     }
 
-    public ASetExpr getDomain() {
+    public Domain getDomain() {
         return domain;
     }
 

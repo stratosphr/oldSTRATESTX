@@ -10,27 +10,19 @@ import visitors.formatters.interfaces.IObjectFormatter;
 import java.util.LinkedHashSet;
 
 /**
- * Created by gvoiron on 18/11/17.
- * Time : 21:10
+ * Created by gvoiron on 19/11/17.
+ * Time : 14:09
  */
-public final class In extends ABoolExpr {
+public final class AInDomain extends ABoolExpr {
 
     private final AArithExpr expr;
     private final ASetExpr set;
+    private final ABoolExpr constraint;
 
-    public In(AArithExpr expr, ASetExpr set) {
+    public AInDomain(AArithExpr expr, ASetExpr set) {
         this.expr = expr;
         this.set = set;
-    }
-
-    @Override
-    public String accept(IObjectFormatter formatter) {
-        return formatter.visit(this);
-    }
-
-    @Override
-    public String accept(IExprFormatter formatter) {
-        return formatter.visit(this);
+        this.constraint = set.getDomainConstraint(expr);
     }
 
     @Override
@@ -44,6 +36,20 @@ public final class In extends ABoolExpr {
 
     public ASetExpr getSet() {
         return set;
+    }
+
+    public final ABoolExpr getConstraint() {
+        return constraint;
+    }
+
+    @Override
+    public String accept(IObjectFormatter formatter) {
+        return formatter.visit(this);
+    }
+
+    @Override
+    public String accept(IExprFormatter formatter) {
+        return formatter.visit(this);
     }
 
 }

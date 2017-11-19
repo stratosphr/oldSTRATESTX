@@ -37,7 +37,7 @@ public final class Fun extends AAssignable {
 
     @Override
     public LinkedHashSet<Var> getVars(DefsContext defsContext) {
-        return Stream.of(Arrays.asList(defsContext.getDef(name).getDomain().getElements().stream().map(value -> new Var(name + "!" + value)).toArray(Var[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(name).getDomain().getElements().stream().map(value -> new Var(name + "!" + value)).toArray(Var[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public String getName() {

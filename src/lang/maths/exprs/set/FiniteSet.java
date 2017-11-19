@@ -10,11 +10,11 @@ import java.util.TreeSet;
  * Created by gvoiron on 18/11/17.
  * Time : 17:33
  */
-public final class Set extends ASetExpr {
+public final class FiniteSet extends AFiniteSetExpr {
 
     private TreeSet<AValue> elements;
 
-    public Set(AValue... elements) {
+    public FiniteSet(AValue... elements) {
         this.elements = new TreeSet<>(Arrays.asList(elements));
     }
 

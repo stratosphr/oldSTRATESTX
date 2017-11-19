@@ -8,9 +8,9 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 18/11/17.
  * Time : 17:17
  */
-public final class VarDef extends ADef {
+public final class VarDef<Domain extends ASetExpr> extends ADef<Domain> {
 
-    public VarDef(String name, ASetExpr domain) {
+    public VarDef(String name, Domain domain) {
         super(name, domain);
     }
 

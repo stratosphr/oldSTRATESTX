@@ -54,8 +54,8 @@ public final class SMTFormatter extends IGenericExprFormatter {
             formatted = defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
             formatted += line();
             formatted += line("(assert " + new And(
-                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new In(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
-                    new And(funs.stream().map(fun -> new In(fun.getParameter(), defsContext.getDef(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
+                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new AInDomain(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
+                    new And(funs.stream().map(fun -> new AInDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
             ).accept(this) + ")");
             formatted += line();
             formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
@@ -75,10 +75,9 @@ public final class SMTFormatter extends IGenericExprFormatter {
         Var index = new Var("i!");
         String formatted = line("(define-fun " + funDef.getName() + " ((" + index + " Int)) Int") + indentRight();
         List<AValue> domainElements = new ArrayList<>(funDef.getDomain().getElements());
-        List<AValue> coDomainElements = new ArrayList<>(funDef.getCoDomain().getElements());
         ListIterator<AValue> iterator = domainElements.listIterator(domainElements.size());
         AValue firstDomainElement = iterator.previous();
-        ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getName() + "!" + firstDomainElement), new Minus(coDomainElements.iterator().next(), new Int(1)));
+        ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getName() + "!" + firstDomainElement), new Int(0));
         while (iterator.hasPrevious()) {
             AValue element = iterator.previous();
             arithITE = new ArithITE(new Equals(index, element), new Var(funDef.getName() + "!" + element), arithITE);
@@ -140,6 +139,21 @@ public final class SMTFormatter extends IGenericExprFormatter {
     }
 
     @Override
+    public String visit(True aTrue) {
+        return formatBoolExpr("true", new ArrayList<>());
+    }
+
+    @Override
+    public String visit(False aFalse) {
+        return formatBoolExpr("false", new ArrayList<>());
+    }
+
+    @Override
+    public String visit(Not not) {
+        return fold(formatBoolExpr("not", Collections.singletonList(not.getOperand())));
+    }
+
+    @Override
     public String visit(Or or) {
         return fold(formatBoolExpr("or", or.getOperands()));
     }
@@ -155,8 +169,28 @@ public final class SMTFormatter extends IGenericExprFormatter {
     }
 
     @Override
-    public String visit(In in) {
-        return new Or(in.getSet().getElements().stream().map(value -> new Equals(in.getExpr(), value)).toArray(ABoolExpr[]::new)).accept(this);
+    public String visit(LT lt) {
+        return fold(formatBoolExpr("<", Arrays.asList(lt.getLeft(), lt.getRight())));
+    }
+
+    @Override
+    public String visit(LEQ leq) {
+        return fold(formatBoolExpr("<=", Arrays.asList(leq.getLeft(), leq.getRight())));
+    }
+
+    @Override
+    public String visit(GEQ geq) {
+        return fold(formatBoolExpr(">=", Arrays.asList(geq.getLeft(), geq.getRight())));
+    }
+
+    @Override
+    public String visit(GT gt) {
+        return fold(formatBoolExpr(">", Arrays.asList(gt.getLeft(), gt.getRight())));
+    }
+
+    @Override
+    public String visit(AInDomain aInDomain) {
+        return aInDomain.getConstraint().accept(this);
     }
 
 }

@@ -1,24 +1,17 @@
 package lang.maths.exprs.set;
 
-import lang.maths.exprs.AExpr;
-import lang.maths.exprs.arith.AValue;
-
-import java.util.TreeSet;
+import lang.maths.exprs.arith.AArithExpr;
+import lang.maths.exprs.bool.ABoolExpr;
+import visitors.formatters.interfaces.IObjectFormattable;
 
 /**
  * Created by gvoiron on 18/11/17.
  * Time : 16:29
  */
-public abstract class ASetExpr extends AExpr {
+public abstract class ASetExpr implements IObjectFormattable {
 
-    public abstract TreeSet<AValue> getElements();
+    public abstract boolean isEmpty();
 
-    public final int getCard() {
-        return getElements().size();
-    }
-
-    public final boolean isEmpty() {
-        return getElements().isEmpty();
-    }
+    public abstract ABoolExpr getDomainConstraint(AArithExpr expr);
 
 }

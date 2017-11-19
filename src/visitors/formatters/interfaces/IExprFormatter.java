@@ -3,10 +3,7 @@ package visitors.formatters.interfaces;
 import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
-import lang.maths.exprs.bool.And;
-import lang.maths.exprs.bool.Equals;
-import lang.maths.exprs.bool.In;
-import lang.maths.exprs.bool.Or;
+import lang.maths.exprs.bool.*;
 
 /**
  * Created by gvoiron on 17/11/17.
@@ -38,12 +35,26 @@ public interface IExprFormatter {
 
     String visit(ArithITE arithITE);
 
+    String visit(True aTrue);
+
+    String visit(False aFalse);
+
+    String visit(Not not);
+
     String visit(Or or);
 
     String visit(And and);
 
     String visit(Equals equals);
 
-    String visit(In in);
+    String visit(LT lt);
+
+    String visit(LEQ leq);
+
+    String visit(GEQ geq);
+
+    String visit(GT gt);
+
+    String visit(AInDomain aInDomain);
 
 }

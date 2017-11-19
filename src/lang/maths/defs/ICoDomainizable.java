@@ -1,6 +1,6 @@
 package lang.maths.defs;
 
-import lang.maths.exprs.set.ASetExpr;
+import lang.maths.exprs.set.AFiniteSetExpr;
 
 /**
  * Created by gvoiron on 18/11/17.
@@ -8,6 +8,6 @@ import lang.maths.exprs.set.ASetExpr;
  */
 public interface ICoDomainizable extends IDomainizable {
 
-    ASetExpr getCoDomain(DefsContext defsContext);
+    AFiniteSetExpr getCoDomain(DefsContext defsContext);
 
 }

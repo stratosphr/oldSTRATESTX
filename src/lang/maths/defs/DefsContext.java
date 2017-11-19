@@ -37,7 +37,7 @@ public final class DefsContext {
         if (defs.containsKey(funDef.getName())) {
             throw new Error("Error: function \"" + funDef.getName() + "\" was already defined in this scope.");
         }
-        funDef.getDomain().getElements().forEach(value -> addDef(new VarDef(funDef.getName() + "!" + value, funDef.getCoDomain())));
+        funDef.getDomain().getElements().forEach(value -> addDef(new VarDef<>(funDef.getName() + "!" + value, funDef.getCoDomain())));
         funsDefs.put(funDef.getName(), funDef);
         defs.put(funDef.getName(), funDef);
     }

@@ -4,11 +4,8 @@ import lang.eventb.substitutions.Skip;
 import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
-import lang.maths.exprs.bool.And;
-import lang.maths.exprs.bool.Equals;
-import lang.maths.exprs.bool.In;
-import lang.maths.exprs.bool.Or;
-import lang.maths.exprs.set.Set;
+import lang.maths.exprs.bool.*;
+import lang.maths.exprs.set.*;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.stream.Collectors;
@@ -80,6 +77,21 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
+    public String visit(True aTrue) {
+        return "true";
+    }
+
+    @Override
+    public String visit(False aFalse) {
+        return "false";
+    }
+
+    @Override
+    public String visit(Not not) {
+        return "not(" + not.getOperand();
+    }
+
+    @Override
     public String visit(Or or) {
         return "or(" + or.getOperands().stream().map(operand -> operand.accept(this)).collect(Collectors.joining(", ")) + ")";
     }
@@ -95,12 +107,62 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
-    public String visit(In in) {
-        return in.getExpr().accept(this) + " in " + in.getSet().accept(this);
+    public String visit(LT lt) {
+        return lt.getLeft() + " < " + lt.getRight();
     }
 
     @Override
-    public String visit(Set set) {
+    public String visit(LEQ leq) {
+        return leq.getLeft() + " <= " + leq.getRight();
+    }
+
+    @Override
+    public String visit(GEQ geq) {
+        return geq.getLeft() + " >= " + geq.getRight();
+    }
+
+    @Override
+    public String visit(GT gt) {
+        return gt.getLeft() + " > " + gt.getRight();
+    }
+
+    @Override
+    public String visit(AInDomain aInDomain) {
+        return aInDomain.getExpr().accept(this) + " in " + aInDomain.getSet().accept(this);
+    }
+
+    @Override
+    public String visit(Z z) {
+        return "Z";
+    }
+
+    @Override
+    public String visit(ZMinus zMinus) {
+        return "Z-";
+    }
+
+    @Override
+    public String visit(ZMinusStar zMinusStar) {
+        return "Z-*";
+    }
+
+    @Override
+    public String visit(ZMinusPlus zMinusPlus) {
+        return "Z-+";
+    }
+
+    @Override
+    public String visit(N n) {
+        return "N";
+    }
+
+    @Override
+    public String visit(NPlus nPlus) {
+        return "N+";
+    }
+
+    @Override
+    public String visit(FiniteSet set) {
         return "{" + set.getElements().stream().map(element -> element.accept(this)).collect(Collectors.joining(", ")) + "}";
     }
 
