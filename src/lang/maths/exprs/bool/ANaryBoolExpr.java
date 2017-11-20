@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.AGenericTypeExpr;
+import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Var;
 
 import java.util.Arrays;
@@ -29,6 +30,11 @@ public abstract class ANaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExp
     @Override
     public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return operands.stream().map(operand -> operand.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

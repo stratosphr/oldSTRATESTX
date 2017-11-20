@@ -12,7 +12,6 @@ public final class Z3Result {
     private final ABoolExpr expr;
     private final Status status;
     private final Model model;
-    private boolean unsatCore;
 
     Z3Result(ABoolExpr expr, Status status, Model model) {
         this.expr = expr;

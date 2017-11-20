@@ -41,6 +41,11 @@ public final class ArithITE extends AArithExpr {
         return Stream.of(condition.getVars(defsContext), thenPart.getVars(defsContext), elsePart.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Override
+    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return Stream.of(condition.getFuns(defsContext), thenPart.getFuns(defsContext), elsePart.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
     public ABoolExpr getCondition() {
         return condition;
     }

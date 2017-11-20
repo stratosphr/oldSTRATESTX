@@ -55,6 +55,12 @@ public interface IExprFormatter {
 
     String visit(GT gt);
 
-    String visit(AInDomain aInDomain);
+    String visit(InDomain inDomain);
+
+    String visit(Implies implies);
+
+    String visit(ForAll forAll);
+
+    String visit(Exists exists);
 
 }

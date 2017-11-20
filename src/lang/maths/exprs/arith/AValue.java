@@ -4,6 +4,8 @@ import lang.maths.defs.DefsContext;
 import lang.maths.exprs.bool.Equals;
 import solvers.z3.Z3;
 
+import java.util.LinkedHashSet;
+
 /**
  * Created by gvoiron on 18/11/17.
  * Time : 19:04
@@ -26,6 +28,16 @@ public abstract class AValue extends AArithExpr {
             throw new Error("Unhandled case of const value!");
         }
         return value;
+    }
+
+    @Override
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
+    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return new LinkedHashSet<>();
     }
 
 }

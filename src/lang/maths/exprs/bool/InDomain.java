@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AArithExpr;
+import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Var;
 import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IExprFormatter;
@@ -13,13 +14,13 @@ import java.util.LinkedHashSet;
  * Created by gvoiron on 19/11/17.
  * Time : 14:09
  */
-public final class AInDomain extends ABoolExpr {
+public final class InDomain extends ABoolExpr {
 
     private final AArithExpr expr;
     private final ASetExpr set;
     private final ABoolExpr constraint;
 
-    public AInDomain(AArithExpr expr, ASetExpr set) {
+    public InDomain(AArithExpr expr, ASetExpr set) {
         this.expr = expr;
         this.set = set;
         this.constraint = set.getDomainConstraint(expr);
@@ -28,6 +29,11 @@ public final class AInDomain extends ABoolExpr {
     @Override
     public LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return expr.getVars(defsContext);
+    }
+
+    @Override
+    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return expr.getFuns(defsContext);
     }
 
     public AArithExpr getExpr() {

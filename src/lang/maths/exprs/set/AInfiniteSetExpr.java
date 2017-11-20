@@ -2,7 +2,7 @@ package lang.maths.exprs.set;
 
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.Int;
-import lang.maths.exprs.bool.ABoolExpr;
+import lang.maths.exprs.bool.*;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -17,17 +17,17 @@ public abstract class AInfiniteSetExpr extends ASetExpr {
     private final Int upperBound;
     private final LinkedHashSet<Int> excluded;
 
-    AInfiniteSetExpr(Int lowerBound, Int upperBound, Int... excluded) {
+    public AInfiniteSetExpr(Int lowerBound, Int upperBound, Int... excluded) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.excluded = new LinkedHashSet<>(Arrays.asList(excluded));
     }
 
-    public final boolean hasLowerBound() {
+    private boolean hasLowerBound() {
         return lowerBound != null;
     }
 
-    public final boolean hasUpperBound() {
+    private boolean hasUpperBound() {
         return upperBound != null;
     }
 
@@ -36,19 +36,18 @@ public abstract class AInfiniteSetExpr extends ASetExpr {
         return false;
     }
 
-    public Int getLowerBound() {
-        return lowerBound;
-    }
-
-    public Int getUpperBound() {
-        return upperBound;
-    }
-
-    public LinkedHashSet<Int> getExcluded() {
-        return excluded;
-    }
-
     @Override
-    public abstract ABoolExpr getDomainConstraint(AArithExpr expr);
+    public ABoolExpr getDomainConstraint(AArithExpr expr) {
+        ABoolExpr excludedConstraint = new Not(new Or(excluded.stream().map(anInt -> new Equals(expr, anInt)).toArray(ABoolExpr[]::new)));
+        if (hasLowerBound() && hasUpperBound()) {
+            return new And(new GEQ(expr, lowerBound), new LEQ(expr, upperBound), excludedConstraint);
+        } else if (hasLowerBound()) {
+            return new And(new GEQ(expr, lowerBound), excludedConstraint);
+        } else if (hasUpperBound()) {
+            return new And(new LEQ(expr, upperBound), excludedConstraint);
+        } else {
+            return excludedConstraint;
+        }
+    }
 
 }

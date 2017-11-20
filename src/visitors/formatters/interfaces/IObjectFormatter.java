@@ -5,7 +5,8 @@ import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
-import lang.maths.exprs.set.*;
+import lang.maths.exprs.set.FiniteSet;
+import lang.maths.exprs.set.usuals.*;
 
 /**
  * Created by gvoiron on 17/11/17.
@@ -57,7 +58,13 @@ public interface IObjectFormatter {
 
     String visit(GT gt);
 
-    String visit(AInDomain aInDomain);
+    String visit(InDomain inDomain);
+
+    String visit(Implies implies);
+
+    String visit(ForAll forAll);
+
+    String visit(Exists exists);
 
     String visit(Z z);
 

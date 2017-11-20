@@ -20,16 +20,19 @@ public final class SMTFormatter extends IGenericExprFormatter {
     private final int foldingLimit;
     private final LinkedHashSet<Fun> funs;
     private boolean isVisitingBoolExpr;
+    private LinkedHashSet<AArithExpr> quantifiedVars;
 
     public SMTFormatter(DefsContext defsContext) {
         this(defsContext, 80);
     }
 
-    private SMTFormatter(DefsContext defsContext, int foldingLimit) {
+    @SuppressWarnings("WeakerAccess")
+    public SMTFormatter(DefsContext defsContext, int foldingLimit) {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
         this.funs = new LinkedHashSet<>();
         this.isVisitingBoolExpr = false;
+        this.quantifiedVars = new LinkedHashSet<>();
     }
 
     private String fold(String formatted) {
@@ -43,19 +46,35 @@ public final class SMTFormatter extends IGenericExprFormatter {
         return formatted;
     }
 
-    private String formatBoolExpr(String operator, List<? extends IGenericExprFormattable> operands) {
+    private String formatBoolExpr(String operator, ABoolExpr expr, List<? extends IGenericExprFormattable> operands) {
         boolean wasVisitingBoolExpr = isVisitingBoolExpr;
         if (!isVisitingBoolExpr) {
             isVisitingBoolExpr = true;
         }
-        String formatted = operands.isEmpty() ? operator : line("(" + operator) + indentRight() + operands.stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")");
+        String formatted;
+        if (expr instanceof AQuantifier) {
+            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getName().equals(varDef.getName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new));
+            ABoolExpr quantifiedExpr;
+            if (expr instanceof ForAll) {
+                quantifiedExpr = new Implies(funsConstraint, ((ForAll) expr).getExpr());
+            } else if (expr instanceof Exists) {
+                quantifiedExpr = new And(funsConstraint, ((AQuantifier) expr).getExpr());
+            } else {
+                throw new Error("Error: unhandled quantifier type \"" + expr.getClass().getSimpleName() + "\".");
+            }
+            formatted = line("(" + operator) + indentRight() + indentLine("(" + ((AQuantifier) expr).getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(quantifiedExpr.accept(this)) + indentLeft() + indent(")");
+        } else if (operands.isEmpty()) {
+            formatted = operator;
+        } else {
+            formatted = line("(" + operator) + indentRight() + operands.stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")");
+        }
         if (!wasVisitingBoolExpr) {
             String oldFormatted = formatted;
             formatted = defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
             formatted += line();
             formatted += line("(assert " + new And(
-                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new AInDomain(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
-                    new And(funs.stream().map(fun -> new AInDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
+                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
+                    new And(funs.stream().map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
             ).accept(this) + ")");
             formatted += line();
             formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
@@ -104,7 +123,9 @@ public final class SMTFormatter extends IGenericExprFormatter {
 
     @Override
     public String visit(Fun fun) {
-        funs.add(fun);
+        if (!quantifiedVars.contains(fun.getParameter())) {
+            funs.add(fun);
+        }
         return fold(formatArithExpr("(" + fun.getName() + " " + fun.getParameter().accept(this) + ")"));
     }
 
@@ -140,57 +161,80 @@ public final class SMTFormatter extends IGenericExprFormatter {
 
     @Override
     public String visit(True aTrue) {
-        return formatBoolExpr("true", new ArrayList<>());
+        return formatBoolExpr("true", aTrue, new ArrayList<>());
     }
 
     @Override
     public String visit(False aFalse) {
-        return formatBoolExpr("false", new ArrayList<>());
+        return formatBoolExpr("false", aFalse, new ArrayList<>());
     }
 
     @Override
     public String visit(Not not) {
-        return fold(formatBoolExpr("not", Collections.singletonList(not.getOperand())));
+        return fold(formatBoolExpr("not", not, Collections.singletonList(not.getOperand())));
     }
 
     @Override
     public String visit(Or or) {
-        return fold(formatBoolExpr("or", or.getOperands()));
+        return fold(formatBoolExpr("or", or, or.getOperands()));
     }
 
     @Override
     public String visit(And and) {
-        return fold(formatBoolExpr("and", and.getOperands()));
+        return fold(formatBoolExpr("and", and, and.getOperands()));
     }
 
     @Override
     public String visit(Equals equals) {
-        return fold(formatBoolExpr("=", equals.getOperands()));
+        return fold(formatBoolExpr("=", equals, equals.getOperands()));
     }
 
     @Override
     public String visit(LT lt) {
-        return fold(formatBoolExpr("<", Arrays.asList(lt.getLeft(), lt.getRight())));
+        return fold(formatBoolExpr("<", lt, Arrays.asList(lt.getLeft(), lt.getRight())));
     }
 
     @Override
     public String visit(LEQ leq) {
-        return fold(formatBoolExpr("<=", Arrays.asList(leq.getLeft(), leq.getRight())));
+        return fold(formatBoolExpr("<=", leq, Arrays.asList(leq.getLeft(), leq.getRight())));
     }
 
     @Override
     public String visit(GEQ geq) {
-        return fold(formatBoolExpr(">=", Arrays.asList(geq.getLeft(), geq.getRight())));
+        return fold(formatBoolExpr(">=", geq, Arrays.asList(geq.getLeft(), geq.getRight())));
     }
 
     @Override
     public String visit(GT gt) {
-        return fold(formatBoolExpr(">", Arrays.asList(gt.getLeft(), gt.getRight())));
+        return fold(formatBoolExpr(">", gt, Arrays.asList(gt.getLeft(), gt.getRight())));
     }
 
     @Override
-    public String visit(AInDomain aInDomain) {
-        return aInDomain.getConstraint().accept(this);
+    public String visit(InDomain inDomain) {
+        return inDomain.getConstraint().accept(this);
+    }
+
+    @Override
+    public String visit(Implies implies) {
+        return formatBoolExpr("=>", implies, Arrays.asList(implies.getCondition(), implies.getThenPart()));
+    }
+
+    @Override
+    public String visit(ForAll forAll) {
+        LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
+        quantifiedVars.addAll(forAll.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getName())).collect(Collectors.toList()));
+        String formatted = formatBoolExpr("forall", forAll, new ArrayList<>());
+        quantifiedVars = oldQuantifiedVars;
+        return formatted;
+    }
+
+    @Override
+    public String visit(Exists exists) {
+        LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
+        quantifiedVars.addAll(exists.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getName())).collect(Collectors.toList()));
+        String formatted = formatBoolExpr("exists", exists, new ArrayList<>());
+        quantifiedVars = oldQuantifiedVars;
+        return formatted;
     }
 
 }

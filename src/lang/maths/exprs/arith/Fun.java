@@ -7,6 +7,7 @@ import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,6 +39,11 @@ public final class Fun extends AAssignable {
     @Override
     public LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(name).getDomain().getElements().stream().map(value -> new Var(name + "!" + value)).toArray(Var[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return new LinkedHashSet<>(Collections.singletonList(this));
     }
 
     public String getName() {

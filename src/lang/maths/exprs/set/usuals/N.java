@@ -1,4 +1,4 @@
-package lang.maths.exprs.set;
+package lang.maths.exprs.set.usuals;
 
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.Int;
@@ -10,10 +10,10 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 19/11/17.
  * Time : 14:20
  */
-public final class NPlus extends AInfiniteSetExpr {
+public final class N extends AUsualSet {
 
-    public NPlus() {
-        super(new Int(1), null);
+    N() {
+        super(new Int(0), null);
     }
 
     @Override
@@ -23,7 +23,7 @@ public final class NPlus extends AInfiniteSetExpr {
 
     @Override
     public ABoolExpr getDomainConstraint(AArithExpr expr) {
-        return new GEQ(expr, new Int(1));
+        return new GEQ(expr, new Int(0));
     }
 
 }

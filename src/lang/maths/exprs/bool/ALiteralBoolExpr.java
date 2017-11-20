@@ -1,6 +1,7 @@
 package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
+import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Var;
 
 import java.util.LinkedHashSet;
@@ -13,6 +14,11 @@ public abstract class ALiteralBoolExpr extends ABoolExpr {
 
     @Override
     public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
+    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
         return new LinkedHashSet<>();
     }
 

@@ -5,7 +5,8 @@ import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
-import lang.maths.exprs.set.*;
+import lang.maths.exprs.set.FiniteSet;
+import lang.maths.exprs.set.usuals.*;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.stream.Collectors;
@@ -127,8 +128,23 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
-    public String visit(AInDomain aInDomain) {
-        return aInDomain.getExpr().accept(this) + " in " + aInDomain.getSet().accept(this);
+    public String visit(InDomain inDomain) {
+        return inDomain.getExpr().accept(this) + " in " + inDomain.getSet().accept(this);
+    }
+
+    @Override
+    public String visit(Implies implies) {
+        return implies.getCondition() + " => " + implies.getThenPart();
+    }
+
+    @Override
+    public String visit(ForAll forAll) {
+        return null;
+    }
+
+    @Override
+    public String visit(Exists exists) {
+        return null;
     }
 
     @Override

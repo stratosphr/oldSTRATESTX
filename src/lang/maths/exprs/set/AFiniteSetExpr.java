@@ -16,7 +16,7 @@ public abstract class AFiniteSetExpr extends ASetExpr {
 
     public abstract TreeSet<AValue> getElements();
 
-    public final int getCard() {
+    public final int size() {
         return getElements().size();
     }
 

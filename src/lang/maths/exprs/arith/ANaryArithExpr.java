@@ -29,8 +29,13 @@ abstract class ANaryArithExpr<T extends AGenericTypeExpr> extends AArithExpr {
     }
 
     @Override
-    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return operands.stream().map(operand -> operand.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

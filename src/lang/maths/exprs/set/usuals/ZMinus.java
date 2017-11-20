@@ -1,4 +1,4 @@
-package lang.maths.exprs.set;
+package lang.maths.exprs.set.usuals;
 
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.Int;
@@ -10,10 +10,10 @@ import visitors.formatters.interfaces.IObjectFormatter;
  * Created by gvoiron on 19/11/17.
  * Time : 14:20
  */
-public final class ZMinusStar extends AInfiniteSetExpr {
+public final class ZMinus extends AUsualSet {
 
-    public ZMinusStar() {
-        super(null, new Int(0));
+    ZMinus() {
+        super(null, new Int(-1));
     }
 
     @Override
@@ -23,7 +23,7 @@ public final class ZMinusStar extends AInfiniteSetExpr {
 
     @Override
     public ABoolExpr getDomainConstraint(AArithExpr expr) {
-        return new LEQ(expr, new Int(0));
+        return new LEQ(expr, new Int(-1));
     }
 
 }

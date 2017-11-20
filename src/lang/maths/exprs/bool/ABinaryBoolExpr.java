@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.AGenericTypeExpr;
+import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Var;
 
 import java.util.Collection;
@@ -28,11 +29,16 @@ abstract class ABinaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExpr {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public T getLeft() {
+    @Override
+    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+        return Stream.of(left.getFuns(defsContext), right.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public final T getLeft() {
         return left;
     }
 
-    public T getRight() {
+    public final T getRight() {
         return right;
     }
 

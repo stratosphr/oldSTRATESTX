@@ -1,18 +1,19 @@
-package lang.maths.exprs.set;
+package lang.maths.exprs.set.usuals;
 
 import lang.maths.exprs.arith.AArithExpr;
+import lang.maths.exprs.arith.Int;
 import lang.maths.exprs.bool.ABoolExpr;
-import lang.maths.exprs.bool.True;
+import lang.maths.exprs.bool.LEQ;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
  * Created by gvoiron on 19/11/17.
  * Time : 14:20
  */
-public final class Z extends AInfiniteSetExpr {
+public final class ZMinusStar extends AUsualSet {
 
-    public Z() {
-        super(null, null);
+    ZMinusStar() {
+        super(null, new Int(0));
     }
 
     @Override
@@ -22,7 +23,7 @@ public final class Z extends AInfiniteSetExpr {
 
     @Override
     public ABoolExpr getDomainConstraint(AArithExpr expr) {
-        return new True();
+        return new LEQ(expr, new Int(0));
     }
 
 }
