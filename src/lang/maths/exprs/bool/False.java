@@ -1,6 +1,6 @@
 package lang.maths.exprs.bool;
 
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
@@ -15,7 +15,7 @@ public final class False extends ALiteralBoolExpr {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by gvoiron on 17/11/17.
  * Time : 01:53
  */
-public final class SMTFormatter extends IGenericExprFormatter {
+public final class SMTFormatter extends GenericExprFormatter {
 
     private final DefsContext defsContext;
     private final int foldingLimit;

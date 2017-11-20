@@ -9,7 +9,7 @@ import lang.maths.exprs.bool.*;
  * Created by gvoiron on 17/11/17.
  * Time : 01:52
  */
-public interface IExprFormatter {
+public interface IGenericExprFormatter {
 
     String visit(FunDef funDef);
 

@@ -1,7 +1,7 @@
 package lang.maths.exprs.arith;
 
 import lang.AObject;
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
@@ -15,7 +15,7 @@ public final class Int extends AValue {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 

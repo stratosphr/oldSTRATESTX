@@ -2,7 +2,7 @@ package lang.maths.defs;
 
 import lang.maths.exprs.set.AFiniteSetExpr;
 import lang.maths.exprs.set.ASetExpr;
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
@@ -22,7 +22,7 @@ public final class FunDef extends ADef<AFiniteSetExpr> {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 

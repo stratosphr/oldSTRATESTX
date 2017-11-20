@@ -6,6 +6,6 @@ package visitors.formatters.interfaces;
  */
 public interface IGenericExprFormattable {
 
-    String accept(IExprFormatter formatter);
+    String accept(IGenericExprFormatter formatter);
 
 }

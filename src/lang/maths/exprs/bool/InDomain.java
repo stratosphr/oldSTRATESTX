@@ -5,7 +5,7 @@ import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Var;
 import lang.maths.exprs.set.ASetExpr;
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.LinkedHashSet;
@@ -54,7 +54,7 @@ public final class InDomain extends ABoolExpr {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 

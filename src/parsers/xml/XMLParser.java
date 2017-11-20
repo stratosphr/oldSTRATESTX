@@ -24,8 +24,8 @@ public final class XMLParser extends DefaultHandler {
     private final boolean validate;
     private SAXParserFactory factory;
     private Locator locator;
-    private XMLParsedNode root;
-    private XMLParsedNode currentNode;
+    private XMLNode root;
+    private XMLNode currentNode;
 
     public XMLParser(boolean validate) {
         this.validate = validate;
@@ -34,12 +34,12 @@ public final class XMLParser extends DefaultHandler {
         factory.setValidating(validate);
     }
 
-    public XMLParsedNode parse(File file) {
+    public XMLNode parse(File file) {
         return parse(file, null);
     }
 
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    public XMLParsedNode parse(File file, File xsd) {
+    public XMLNode parse(File file, File xsd) {
         try {
             SAXParser parser = factory.newSAXParser();
             if (validate) {
@@ -62,7 +62,7 @@ public final class XMLParser extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String tagName, Attributes attributes) throws SAXException {
-        XMLParsedNode node = new XMLParsedNode(tagName, new File(locator.getSystemId()), locator.getLineNumber(), locator.getColumnNumber());
+        XMLNode node = new XMLNode(tagName, new File(locator.getSystemId()), locator.getLineNumber(), locator.getColumnNumber());
         for (int i = 0; i < attributes.getLength(); i++) {
             node.addAttribute(attributes.getLocalName(i), attributes.getValue(i));
         }

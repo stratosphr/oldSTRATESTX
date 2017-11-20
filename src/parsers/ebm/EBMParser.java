@@ -1,5 +1,6 @@
 package parsers.ebm;
 
+import parsers.xml.XMLNode;
 import parsers.xml.XMLParser;
 import utilities.ResourcesManager;
 
@@ -16,9 +17,11 @@ public final class EBMParser {
     public EBMParser() {
     }
 
-    public void parse(File file) {
+    public void parse(File file) throws Exception {
         XMLParser xmlParser = new XMLParser(true);
-        xmlParser.parse(file, ResourcesManager.getXMLSchema(EBM));
+        XMLNode root = xmlParser.parse(file, ResourcesManager.getXMLSchema(EBM));
+        System.out.println(root);
+        root.assertConformsTo("model", 3, 7, "sets-defs", "consts-defs", "vars-defs", "funs-defs", "invariant", "initialisation", "events");
     }
 
 }

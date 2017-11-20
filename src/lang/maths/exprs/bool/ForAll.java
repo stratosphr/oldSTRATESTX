@@ -2,7 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.Var;
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public final class ForAll extends AQuantifier {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 

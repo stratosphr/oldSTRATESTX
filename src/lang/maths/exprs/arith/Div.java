@@ -1,6 +1,6 @@
 package lang.maths.exprs.arith;
 
-import visitors.formatters.interfaces.IExprFormatter;
+import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
@@ -14,7 +14,7 @@ public final class Div extends ANaryArithExpr<AArithExpr> {
     }
 
     @Override
-    public String accept(IExprFormatter formatter) {
+    public String accept(IGenericExprFormatter formatter) {
         return formatter.visit(this);
     }
 
