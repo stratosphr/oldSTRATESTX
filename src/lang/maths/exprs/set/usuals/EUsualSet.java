@@ -5,12 +5,5 @@ package lang.maths.exprs.set.usuals;
  * Time : 10:58
  */
 public enum EUsualSet {
-
-    N,
-    N_PLUS,
-    Z,
-    Z_MINUS,
-    Z_MINUS_PLUS,
-    Z_MINUS_STAR,
-
+    N, N_PLUS, Z, Z_MINUS, Z_MINUS_PLUS, Z_MINUS_STAR
 }
