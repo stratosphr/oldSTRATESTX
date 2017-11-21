@@ -1,7 +1,6 @@
 package lang.maths.exprs.set;
 
 import lang.maths.exprs.arith.AArithExpr;
-import lang.maths.exprs.arith.AValue;
 import lang.maths.exprs.bool.ABoolExpr;
 import lang.maths.exprs.bool.Equals;
 import lang.maths.exprs.bool.Or;
@@ -14,7 +13,7 @@ import java.util.TreeSet;
  */
 public abstract class AFiniteSetExpr extends ASetExpr {
 
-    public abstract TreeSet<AValue> getElements();
+    public abstract TreeSet<AArithExpr> getElements();
 
     public final int size() {
         return getElements().size();

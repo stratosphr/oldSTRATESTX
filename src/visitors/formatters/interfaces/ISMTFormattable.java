@@ -4,8 +4,8 @@ package visitors.formatters.interfaces;
  * Created by gvoiron on 17/11/17.
  * Time : 01:51
  */
-public interface IGenericExprFormattable {
+public interface ISMTFormattable {
 
-    String accept(IGenericExprFormatter formatter);
+    String accept(ISMTFormatter formatter);
 
 }

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  * Created by gvoiron on 16/11/17.
  * Time : 17:59
  */
+@SuppressWarnings("WeakerAccess")
 public final class XMLNode implements IXMLFormattable {
 
     private XMLNode parent;
@@ -62,22 +63,26 @@ public final class XMLNode implements IXMLFormattable {
         this.column = column;
     }
 
-    public final void assertConformsTo(String expectedName, int minNbChildren, int maxNbChildren, String... acceptedChildrenNames) throws Exception {
+    public final void assertConformsTo(String expectedName, int minNbChildren, int maxNbChildren, String... acceptedChildrenNames) {
         if (!name.equals(expectedName)) {
-            throw new Exception("Error: The node name \"" + name + "\" does not conform to the expected one (\"" + expectedName + "\").");
+            throw new Error("Error l." + line + ",c." + column + ": The node name \"" + name + "\" does not conform to the expected one (\"" + expectedName + "\").");
         }
         if (children.size() < minNbChildren) {
-            throw new Exception("Error: The number of children (" + children.size() + ") is less than the expected minimum number of children (\"" + minNbChildren + "\")");
+            throw new Error("Error l." + line + ",c." + column + ": The number of children (" + children.size() + ") is less than the expected minimum number of children (\"" + minNbChildren + "\")");
         }
         if (maxNbChildren > 0 && children.size() > maxNbChildren) {
-            throw new Exception("Error: The number of children (" + children.size() + ") exceeds the expected maximum number of children (\"" + minNbChildren + "\")");
+            throw new Error("Error l." + line + ",c." + column + ": The number of children (" + children.size() + ") exceeds the expected maximum number of children (\"" + minNbChildren + "\")");
         }
         List<String> acceptedChildrenNamesList = Arrays.asList(acceptedChildrenNames);
         for (XMLNode child : children) {
             if (!acceptedChildrenNamesList.contains(child.getName())) {
-                throw new Exception("Error: a child node of type \"" + child.getName() + "\" has been found in a \"" + name + "\" node. The accepted children names are the following: " + acceptedChildrenNamesList.stream().collect(Collectors.joining(", ")) + ".");
+                throw new Error("Error l." + line + ",c." + column + ": a child node of type \"" + child.getName() + "\" has been found in a \"" + name + "\" node. The accepted children names are the following: " + acceptedChildrenNamesList.stream().map(childName -> "\"" + childName + "\"").collect(Collectors.joining(", ")) + ".");
             }
         }
+    }
+
+    public XMLNode getFirstChildWithName(String name) {
+        return children.stream().filter(node -> node.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Override

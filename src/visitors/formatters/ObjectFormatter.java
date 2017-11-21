@@ -1,11 +1,14 @@
 package visitors.formatters;
 
+import lang.eventb.Event;
 import lang.eventb.substitutions.Skip;
 import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
-import lang.maths.exprs.set.FiniteSet;
+import lang.maths.exprs.set.Enum;
+import lang.maths.exprs.set.Range;
+import lang.maths.exprs.set.Set;
 import lang.maths.exprs.set.usuals.*;
 import visitors.formatters.interfaces.IObjectFormatter;
 
@@ -35,6 +38,11 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     @Override
     public String visit(Int anInt) {
         return anInt.getValue().toString();
+    }
+
+    @Override
+    public String visit(EnumValue enumValue) {
+        return enumValue.getName();
     }
 
     @Override
@@ -178,8 +186,23 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
-    public String visit(FiniteSet set) {
+    public String visit(Set set) {
         return "{" + set.getElements().stream().map(element -> element.accept(this)).collect(Collectors.joining(", ")) + "}";
+    }
+
+    @Override
+    public String visit(Enum anEnum) {
+        return "{" + anEnum.getElements().stream().map(element -> element.accept(this)).collect(Collectors.joining(", ")) + "}";
+    }
+
+    @Override
+    public String visit(Range range) {
+        return range.getLowerBound().accept(this) + ".." + range.getUpperBound().accept(this);
+    }
+
+    @Override
+    public String visit(Event event) {
+        return null;
     }
 
     @Override

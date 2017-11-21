@@ -1,7 +1,7 @@
 package lang.maths.exprs.bool;
 
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 20/11/17.
@@ -19,7 +19,7 @@ public final class Implies extends ABinaryBoolExpr<ABoolExpr> {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

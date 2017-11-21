@@ -1,14 +1,14 @@
 import parsers.ebm.EBMParser;
 import utilities.ResourcesManager;
 
-import static utilities.ResourcesManager.EModel.EL;
+import static utilities.ResourcesManager.EModel.EXAMPLE;
 
-public class Main {
+class Main {
 
     public static void main(String[] args) {
         EBMParser parser = new EBMParser();
         try {
-            parser.parse(ResourcesManager.getModel(EL));
+            parser.parse(ResourcesManager.getModel(EXAMPLE));
         } catch (Exception e) {
             e.printStackTrace();
         }

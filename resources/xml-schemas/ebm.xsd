@@ -149,7 +149,7 @@
     <xs:element name="enum" substitutionGroup="set-expr-non-named">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="enum-value" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="enum-value" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -198,28 +198,28 @@
     <xs:element name="plus" substitutionGroup="arith-expr-non-enum">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="arith-expr" minOccurs="2" maxOccurs="unbounded"/>
+                <xs:element ref="arith-expr-non-enum" minOccurs="2" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="minus" substitutionGroup="arith-expr-non-enum">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="arith-expr" minOccurs="2" maxOccurs="unbounded"/>
+                <xs:element ref="arith-expr-non-enum" minOccurs="2" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="times" substitutionGroup="arith-expr-non-enum">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="arith-expr" minOccurs="2" maxOccurs="unbounded"/>
+                <xs:element ref="arith-expr-non-enum" minOccurs="2" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="div" substitutionGroup="arith-expr-non-enum">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="arith-expr" minOccurs="2" maxOccurs="unbounded"/>
+                <xs:element ref="arith-expr-non-enum" minOccurs="2" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

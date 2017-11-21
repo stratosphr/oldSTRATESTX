@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  */
 public abstract class AUnaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExpr {
 
-    private T operand;
+    private final T operand;
 
     AUnaryBoolExpr(T operand) {
         this.operand = operand;

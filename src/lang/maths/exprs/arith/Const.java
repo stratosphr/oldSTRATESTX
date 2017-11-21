@@ -1,7 +1,7 @@
 package lang.maths.exprs.arith;
 
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 16/11/17.
@@ -9,14 +9,15 @@ import visitors.formatters.interfaces.IObjectFormatter;
  */
 public final class Const extends AValue {
 
-    private String name;
+    private final String name;
 
-    public Const(String name) {
+    public Const(String name, int value) {
+        super(value);
         this.name = name;
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

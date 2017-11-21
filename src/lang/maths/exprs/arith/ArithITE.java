@@ -2,8 +2,8 @@ package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.bool.ABoolExpr;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -27,7 +27,7 @@ public final class ArithITE extends AArithExpr {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

@@ -1,8 +1,8 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -24,7 +24,7 @@ public final class Var extends AAssignable {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

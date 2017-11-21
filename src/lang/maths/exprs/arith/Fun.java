@@ -2,8 +2,8 @@ package lang.maths.exprs.arith;
 
 import lang.AObject;
 import lang.maths.defs.DefsContext;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +27,7 @@ public final class Fun extends AAssignable {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

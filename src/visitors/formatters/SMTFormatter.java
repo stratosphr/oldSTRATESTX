@@ -5,7 +5,7 @@ import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
-import visitors.formatters.interfaces.IGenericExprFormattable;
+import visitors.formatters.interfaces.ISMTFormattable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ public final class SMTFormatter extends GenericExprFormatter {
         return formatted;
     }
 
-    private String formatBoolExpr(String operator, ABoolExpr expr, List<? extends IGenericExprFormattable> operands) {
+    private String formatBoolExpr(String operator, ABoolExpr expr, List<? extends ISMTFormattable> operands) {
         boolean wasVisitingBoolExpr = isVisitingBoolExpr;
         if (!isVisitingBoolExpr) {
             isVisitingBoolExpr = true;
@@ -70,14 +70,15 @@ public final class SMTFormatter extends GenericExprFormatter {
         }
         if (!wasVisitingBoolExpr) {
             String oldFormatted = formatted;
-            formatted = defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
+            formatted = defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name).accept(this) + ")")).collect(Collectors.joining());
+            formatted += defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getVarsDefs().get(name).accept(this))).collect(Collectors.joining());
             formatted += line();
             formatted += line("(assert " + new And(
-                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getDef(name).getDomain())).toArray(ABoolExpr[]::new)),
+                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getVarsDefs().get(name).getDomain())).toArray(ABoolExpr[]::new)),
                     new And(funs.stream().map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
             ).accept(this) + ")");
             formatted += line();
-            formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getDef(name).accept(this))).collect(Collectors.joining());
+            formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getFunsDefs().get(name).accept(this))).collect(Collectors.joining());
             formatted += line();
             formatted += "(assert " + oldFormatted + ")";
         }
@@ -93,12 +94,12 @@ public final class SMTFormatter extends GenericExprFormatter {
     public String visit(FunDef funDef) {
         Var index = new Var("i!");
         String formatted = line("(define-fun " + funDef.getName() + " ((" + index + " Int)) Int") + indentRight();
-        List<AValue> domainElements = new ArrayList<>(funDef.getDomain().getElements());
-        ListIterator<AValue> iterator = domainElements.listIterator(domainElements.size());
-        AValue firstDomainElement = iterator.previous();
+        List<AArithExpr> domainElements = new ArrayList<>(funDef.getDomain().getElements());
+        ListIterator<AArithExpr> iterator = domainElements.listIterator(domainElements.size());
+        AArithExpr firstDomainElement = iterator.previous();
         ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getName() + "!" + firstDomainElement), new Int(0));
         while (iterator.hasPrevious()) {
-            AValue element = iterator.previous();
+            AArithExpr element = iterator.previous();
             arithITE = new ArithITE(new Equals(index, element), new Var(funDef.getName() + "!" + element), arithITE);
         }
         formatted += indentLine(arithITE.accept(this));
@@ -114,6 +115,11 @@ public final class SMTFormatter extends GenericExprFormatter {
     @Override
     public String visit(Int anInt) {
         return formatArithExpr(anInt.getValue().toString());
+    }
+
+    @Override
+    public String visit(EnumValue enumValue) {
+        return formatArithExpr(enumValue.getValue().toString());
     }
 
     @Override

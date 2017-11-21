@@ -2,8 +2,8 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.Var;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public final class Exists extends AQuantifier {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

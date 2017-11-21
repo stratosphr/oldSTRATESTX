@@ -9,7 +9,7 @@ import lang.maths.exprs.bool.*;
  * Created by gvoiron on 17/11/17.
  * Time : 01:52
  */
-public interface IGenericExprFormatter {
+public interface ISMTFormatter {
 
     String visit(FunDef funDef);
 
@@ -18,6 +18,8 @@ public interface IGenericExprFormatter {
     String visit(Const aConst);
 
     String visit(Int anInt);
+
+    String visit(EnumValue enumValue);
 
     String visit(Var var);
 

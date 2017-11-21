@@ -1,6 +1,6 @@
 package lang.maths.exprs.set;
 
-import lang.maths.exprs.arith.AValue;
+import lang.maths.exprs.arith.AArithExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Arrays;
@@ -10,11 +10,11 @@ import java.util.TreeSet;
  * Created by gvoiron on 18/11/17.
  * Time : 17:33
  */
-public final class FiniteSet extends AFiniteSetExpr {
+public final class Set extends AFiniteSetExpr {
 
-    private TreeSet<AValue> elements;
+    private final TreeSet<AArithExpr> elements;
 
-    public FiniteSet(AValue... elements) {
+    public Set(AArithExpr... elements) {
         this.elements = new TreeSet<>(Arrays.asList(elements));
     }
 
@@ -24,7 +24,7 @@ public final class FiniteSet extends AFiniteSetExpr {
     }
 
     @Override
-    public TreeSet<AValue> getElements() {
+    public TreeSet<AArithExpr> getElements() {
         return elements;
     }
 

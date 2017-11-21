@@ -17,7 +17,7 @@ public abstract class AInfiniteSetExpr extends ASetExpr {
     private final Int upperBound;
     private final LinkedHashSet<Int> excluded;
 
-    public AInfiniteSetExpr(Int lowerBound, Int upperBound, Int... excluded) {
+    protected AInfiniteSetExpr(Int lowerBound, Int upperBound, Int... excluded) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.excluded = new LinkedHashSet<>(Arrays.asList(excluded));

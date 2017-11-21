@@ -1,7 +1,7 @@
 package lang.maths.exprs.bool;
 
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 19/11/17.
@@ -15,7 +15,7 @@ public final class False extends ALiteralBoolExpr {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

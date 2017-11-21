@@ -8,9 +8,9 @@ import java.io.File;
  */
 public final class ResourcesManager {
 
-    private static File resourcesRoot = new File("resources");
-    private static File xmlSchemasRoot = new File(resourcesRoot, "xml-schemas");
-    private static File examplesRoot = new File(resourcesRoot, "examples");
+    private static final File resourcesRoot = new File("resources");
+    private static final File xmlSchemasRoot = new File(resourcesRoot, "xml-schemas");
+    private static final File examplesRoot = new File(resourcesRoot, "examples");
 
     public static File getXMLSchema(EXMLSchema xmlSchema) {
         switch (xmlSchema) {
@@ -34,6 +34,8 @@ public final class ResourcesManager {
                 return new File(new File(examplesRoot, "EL"), "EL.ebm");
             case EV:
                 return new File(new File(examplesRoot, "EV"), "EV.ebm");
+            case EXAMPLE:
+                return new File(new File(examplesRoot, "EXAMPLE"), "EXAMPLE.ebm");
             case GSM:
                 return new File(new File(examplesRoot, "GSM"), "GSM.ebm");
             case L14:
@@ -48,6 +50,6 @@ public final class ResourcesManager {
 
     public enum EXMLSchema {AP, EBM, RP}
 
-    public enum EModel {CA, CM, EL, EV, GSM, L14, L14_2, PH}
+    public enum EModel {CA, CM, EL, EV, EXAMPLE, GSM, L14, L14_2, PH}
 
 }

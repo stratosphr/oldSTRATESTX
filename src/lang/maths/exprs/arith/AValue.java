@@ -1,8 +1,6 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
-import lang.maths.exprs.bool.Equals;
-import solvers.z3.Z3;
 
 import java.util.LinkedHashSet;
 
@@ -12,21 +10,13 @@ import java.util.LinkedHashSet;
  */
 public abstract class AValue extends AArithExpr {
 
-    Integer value;
+    private final int value;
 
-    AValue() {
-        this(null);
-    }
-
-    AValue(Integer value) {
+    AValue(int value) {
         this.value = value;
     }
 
-    public final Integer getValue(DefsContext defsContext) {
-        if (value == null) {
-            Z3.checkSAT(new Equals(new Var("value!"), this), defsContext);
-            throw new Error("Unhandled case of const value!");
-        }
+    public final Integer getValue() {
         return value;
     }
 

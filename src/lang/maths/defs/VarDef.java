@@ -1,8 +1,8 @@
 package lang.maths.defs;
 
 import lang.maths.exprs.set.ASetExpr;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 18/11/17.
@@ -10,12 +10,12 @@ import visitors.formatters.interfaces.IObjectFormatter;
  */
 public final class VarDef<Domain extends ASetExpr> extends ADef<Domain> {
 
-    VarDef(String name, Domain domain) {
+    public VarDef(String name, Domain domain) {
         super(name, domain);
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 

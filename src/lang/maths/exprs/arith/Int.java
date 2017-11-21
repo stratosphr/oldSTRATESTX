@@ -1,8 +1,8 @@
 package lang.maths.exprs.arith;
 
 import lang.AObject;
-import visitors.formatters.interfaces.IGenericExprFormatter;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 16/11/17.
@@ -15,17 +15,13 @@ public final class Int extends AValue {
     }
 
     @Override
-    public String accept(IGenericExprFormatter formatter) {
+    public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
     }
 
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
-    }
-
-    public Integer getValue() {
-        return value;
     }
 
     @Override

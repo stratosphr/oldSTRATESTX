@@ -11,7 +11,7 @@ public abstract class AObject implements IObjectFormattable, Comparable<AObject>
 
     private Integer hashCode;
 
-    public AObject() {
+    protected AObject() {
         this.hashCode = null;
     }
 
@@ -25,7 +25,7 @@ public abstract class AObject implements IObjectFormattable, Comparable<AObject>
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof AObject && hashCode() == o.hashCode();
+        return getClass().equals(o.getClass()) && hashCode() == o.hashCode();
     }
 
     @Override
