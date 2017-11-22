@@ -1,6 +1,7 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
+import visitors.formatters.Primer;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
@@ -14,12 +15,17 @@ import java.util.LinkedHashSet;
  */
 public final class FunVar extends AVar {
 
-    FunVar(String name) {
-        super(name);
+    private final String funName;
+    private final String parameter;
+
+    public FunVar(String funName, String parameter) {
+        this(funName, parameter, false);
     }
 
-    public FunVar(String name, boolean isPrimed) {
-        super(name, isPrimed);
+    public FunVar(String funName, String parameter, boolean isPrimed) {
+        super(funName + "!" + parameter, funName + Primer.getSuffix() + "!" + parameter, isPrimed);
+        this.funName = funName;
+        this.parameter = parameter;
     }
 
     @Override
@@ -45,6 +51,14 @@ public final class FunVar extends AVar {
     @Override
     public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
         return new LinkedHashSet<>();
+    }
+
+    public String getFunName() {
+        return funName;
+    }
+
+    public String getParameter() {
+        return parameter;
     }
 
 }

@@ -13,10 +13,10 @@ public final class FunDef extends ADef<AFiniteSetExpr> {
 
     private final ASetExpr coDomain;
 
-    public FunDef(String name, AFiniteSetExpr domain, ASetExpr coDomain) {
-        super(name, domain);
+    public FunDef(String realName, AFiniteSetExpr domain, ASetExpr coDomain) {
+        super(realName, domain);
         if (coDomain.isEmpty()) {
-            throw new Error("Error: the co-domain of \"" + name + "\" cannot be empty.");
+            throw new Error("Error: the co-domain of \"" + realName + "\" cannot be empty.");
         }
         this.coDomain = coDomain;
     }

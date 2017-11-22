@@ -15,7 +15,7 @@ import java.util.Arrays;
 public final class Exists extends AQuantifier {
 
     public Exists(ABoolExpr expr, VarDef... varDefs) {
-        super(new And(new And(Arrays.stream(varDefs).map(varDef -> new InDomain(new Var(varDef.getName()), varDef.getDomain())).toArray(ABoolExpr[]::new)), expr), varDefs);
+        super(new And(new And(Arrays.stream(varDefs).map(varDef -> new InDomain(new Var(varDef.getUnPrimedName()), varDef.getDomain())).toArray(ABoolExpr[]::new)), expr), varDefs);
     }
 
     @Override

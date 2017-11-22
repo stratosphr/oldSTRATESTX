@@ -54,7 +54,7 @@ public final class SMTFormatter extends GenericExprFormatter {
         }
         String formatted;
         if (expr instanceof AQuantifier) {
-            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
+            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getUnPrimedName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
             ABoolExpr quantifiedExpr;
             if (expr instanceof ForAll) {
                 quantifiedExpr = new Implies(funsConstraint, ((ForAll) expr).getExpr());
@@ -63,7 +63,7 @@ public final class SMTFormatter extends GenericExprFormatter {
             } else {
                 throw new Error("Error: unhandled quantifier type \"" + expr.getClass().getSimpleName() + "\".");
             }
-            formatted = line("(" + operator) + indentRight() + indentLine("(" + ((AQuantifier) expr).getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(quantifiedExpr.accept(this)) + indentLeft() + indent(")");
+            formatted = line("(" + operator) + indentRight() + indentLine("(" + ((AQuantifier) expr).getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getUnPrimedName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(quantifiedExpr.accept(this)) + indentLeft() + indent(")");
         } else if (operands.isEmpty()) {
             formatted = operator;
         } else {
@@ -85,20 +85,20 @@ public final class SMTFormatter extends GenericExprFormatter {
 
     @Override
     public String visit(VarDef varDef) {
-        return "(declare-fun " + varDef.getName() + " () Int)";
+        return "(declare-fun " + varDef.getUnPrimedName() + " () Int)";
     }
 
     @Override
     public String visit(FunDef funDef) {
         Var index = new Var("i!");
-        String formatted = line("(define-fun " + funDef.getName() + " ((" + index + " Int)) Int") + indentRight();
+        String formatted = line("(define-fun " + funDef.getUnPrimedName() + " ((" + index + " Int)) Int") + indentRight();
         List<AArithExpr> domainElements = new ArrayList<>(funDef.getDomain().getElements());
         ListIterator<AArithExpr> iterator = domainElements.listIterator(domainElements.size());
         AArithExpr firstDomainElement = iterator.previous();
-        ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getName() + "!" + firstDomainElement), new Int(0));
+        ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getUnPrimedName() + "!" + firstDomainElement), new Int(0));
         while (iterator.hasPrevious()) {
             AArithExpr element = iterator.previous();
-            arithITE = new ArithITE(new Equals(index, element), new Var(funDef.getName() + "!" + element), arithITE);
+            arithITE = new ArithITE(new Equals(index, element), new Var(funDef.getUnPrimedName() + "!" + element), arithITE);
         }
         formatted += indentLine(arithITE.accept(this));
         formatted += indentLeft() + ")";
@@ -125,17 +125,17 @@ public final class SMTFormatter extends GenericExprFormatter {
 
     @Override
     public String visit(Var var) {
-        if (var.isPrimed() && !defsContext.getVarsDefs().containsKey(var.getPrimedName())) {
+        /*if (var.isPrimed() && !defsContext.getVarsDefs().containsKey(var.getPrimedName())) {
             defsContext.addDef(new VarDef<>(var.getPrimedName(), defsContext.getVarsDefs().get(var.getUnPrimedName()).getDomain()));
-        }
+        }*/
         return formatArithExpr(var.getRealName());
     }
 
     @Override
     public String visit(FunVar funVar) {
-        if (funVar.isPrimed() && !defsContext.getVarsDefs().containsKey(funVar.getPrimedName())) {
+        /*if (funVar.isPrimed() && !defsContext.getVarsDefs().containsKey(funVar.getPrimedName())) {
             defsContext.addDef(new VarDef<>(funVar.getPrimedName(), defsContext.getVarsDefs().get(funVar.getUnPrimedName()).getDomain()));
-        }
+        }*/
         return formatArithExpr(funVar.getRealName());
     }
 
@@ -248,7 +248,7 @@ public final class SMTFormatter extends GenericExprFormatter {
     @Override
     public String visit(ForAll forAll) {
         LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
-        quantifiedVars.addAll(forAll.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getName())).collect(Collectors.toList()));
+        quantifiedVars.addAll(forAll.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getUnPrimedName())).collect(Collectors.toList()));
         String formatted = formatBoolExpr("forall", forAll, new ArrayList<>());
         quantifiedVars = oldQuantifiedVars;
         return formatted;
@@ -257,7 +257,7 @@ public final class SMTFormatter extends GenericExprFormatter {
     @Override
     public String visit(Exists exists) {
         LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
-        quantifiedVars.addAll(exists.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getName())).collect(Collectors.toList()));
+        quantifiedVars.addAll(exists.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getUnPrimedName())).collect(Collectors.toList()));
         String formatted = formatBoolExpr("exists", exists, new ArrayList<>());
         quantifiedVars = oldQuantifiedVars;
         return formatted;

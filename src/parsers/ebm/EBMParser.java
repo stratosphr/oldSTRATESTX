@@ -117,7 +117,7 @@ public final class EBMParser {
         if (domain.isEmpty()) {
             throw new Error("Error l." + node.getLine() + ",c." + node.getColumn() + ": the domain of a variable (here \"" + node.getAttributes().get("name") + "\") cannot be empty (here " + domain + ").");
         }
-        return new VarDef<>(node.getAttributes().get("name"), domain);
+        return new VarDef<>(new Var(node.getAttributes().get("name")), domain);
     }
 
     private LinkedHashSet<FunDef> parseFunsDefs(XMLNode node) {

@@ -10,19 +10,19 @@ import visitors.formatters.interfaces.ISMTFormattable;
  */
 public abstract class ADef<Domain extends ASetExpr> extends AObject implements ISMTFormattable {
 
-    private final String name;
+    private String unPrimedName;
     final Domain domain;
 
-    ADef(String name, Domain domain) {
+    ADef(String unPrimedName, Domain domain) {
         if (domain.isEmpty()) {
-            throw new Error("Error: the domain of \"" + name + "\" cannot be empty.");
+            throw new Error("Error: the domain of \"" + unPrimedName + "\" cannot be empty.");
         }
-        this.name = name;
+        this.unPrimedName = unPrimedName;
         this.domain = domain;
     }
 
-    public String getName() {
-        return name;
+    public String getUnPrimedName() {
+        return unPrimedName;
     }
 
     public Domain getDomain() {

@@ -1,6 +1,7 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
+import visitors.formatters.Primer;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
@@ -15,11 +16,11 @@ import java.util.LinkedHashSet;
 public final class Var extends AVar {
 
     public Var(String name) {
-        super(name);
+        this(name, false);
     }
 
     public Var(String name, boolean isPrimed) {
-        super(name, isPrimed);
+        super(name, name + Primer.getSuffix(), isPrimed);
     }
 
     @Override

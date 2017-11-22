@@ -24,12 +24,12 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(VarDef varDef) {
-        return varDef.getName() + " in " + varDef.getDomain().accept(this);
+        return varDef.getUnPrimedName() + " in " + varDef.getDomain().accept(this);
     }
 
     @Override
     public String visit(FunDef funDef) {
-        return funDef.getName() + " : " + funDef.getDomain().accept(this) + " -> " + funDef.getCoDomain().accept(this);
+        return funDef.getUnPrimedName() + " : " + funDef.getDomain().accept(this) + " -> " + funDef.getCoDomain().accept(this);
     }
 
     @Override
@@ -159,12 +159,12 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(ForAll forAll) {
-        return "\\-/(" + forAll.getQuantifiedVarsDefs().stream().map(ADef::getName).collect(Collectors.joining(", ")) + ").(" + forAll.getExpr().accept(this) + ")";
+        return "\\-/(" + forAll.getQuantifiedVarsDefs().stream().map(ADef::getUnPrimedName).collect(Collectors.joining(", ")) + ").(" + forAll.getExpr().accept(this) + ")";
     }
 
     @Override
     public String visit(Exists exists) {
-        return "E(" + exists.getQuantifiedVarsDefs().stream().map(ADef::getName).collect(Collectors.joining(", ")) + ").(" + exists.getExpr().accept(this) + ")";
+        return "E(" + exists.getQuantifiedVarsDefs().stream().map(ADef::getUnPrimedName).collect(Collectors.joining(", ")) + ").(" + exists.getExpr().accept(this) + ")";
     }
 
     @Override
@@ -267,7 +267,7 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(Any any) {
-        return line("ANY") + indentRight() + any.getQuantifiedVarsDefs().stream().map(varDef -> indentLine(new InDomain(new Var(varDef.getName()), varDef.getDomain()).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLine("WHERE") + indentRight() + indentLine(any.getCondition().accept(this)) + indentLeft() + indentLine("THEN") + indentRight() + indentLine(any.getSubstitution().accept(this)) + indentLeft() + indent("END");
+        return line("ANY") + indentRight() + any.getQuantifiedVarsDefs().stream().map(varDef -> indentLine(new InDomain(new Var(varDef.getUnPrimedName()), varDef.getDomain()).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLine("WHERE") + indentRight() + indentLine(any.getCondition().accept(this)) + indentLeft() + indentLine("THEN") + indentRight() + indentLine(any.getSubstitution().accept(this)) + indentLeft() + indent("END");
     }
 
 }

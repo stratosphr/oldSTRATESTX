@@ -12,7 +12,7 @@ import java.util.LinkedHashSet;
 
 /**
  * Created by gvoiron on 21/11/17.
- * Time : 19:42
+ * Time : 19:43
  */
 public final class Any extends ASubstitution {
 

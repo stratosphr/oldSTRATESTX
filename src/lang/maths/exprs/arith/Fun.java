@@ -2,6 +2,7 @@ package lang.maths.exprs.arith;
 
 import lang.AObject;
 import lang.maths.defs.DefsContext;
+import visitors.formatters.Primer;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
@@ -22,12 +23,11 @@ public final class Fun extends AAssignable {
     private final AArithExpr parameter;
 
     public Fun(String name, AArithExpr parameter) {
-        super(name);
-        this.parameter = parameter;
+        this(name, parameter, false);
     }
 
     public Fun(String name, AArithExpr parameter, boolean isPrimed) {
-        super(name, isPrimed);
+        super(name, name + Primer.getSuffix(), isPrimed);
         this.parameter = parameter;
     }
 
@@ -48,7 +48,7 @@ public final class Fun extends AAssignable {
 
     @Override
     public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
-        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(value -> new FunVar(getRealName() + "!" + value)).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(element -> new FunVar(getUnPrimedName(), element.toString(), isPrimed())).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

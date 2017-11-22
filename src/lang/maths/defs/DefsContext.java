@@ -1,5 +1,6 @@
 package lang.maths.defs;
 
+import lang.maths.exprs.arith.FunVar;
 import lang.maths.exprs.arith.Int;
 import lang.maths.exprs.arith.Var;
 
@@ -25,29 +26,29 @@ public final class DefsContext {
     }
 
     public void addFreshVar(Var var) {
-        addDef(new VarDef<>(var.getUnPrimedName(), getUsualSet(Z)));
+        addDef(new VarDef<>(var, getUsualSet(Z)));
     }
 
     public void addConstDef(String name, Int value) {
-        if (constsDefs.containsKey(name)) {
+        if (constsDefs.containsKey(name) && !constsDefs.get(name).equals(value)) {
             throw new Error("Error: const \"" + name + "\" was already defined in this scope.");
         }
         constsDefs.put(name, value);
     }
 
     public void addDef(VarDef varDef) {
-        if (varsDefs.containsKey(varDef.getName())) {
-            throw new Error("Error: variable \"" + varDef.getName() + "\" was already defined in this scope.");
+        if (varsDefs.containsKey(varDef.getVar().getUnPrimedName()) && !varsDefs.get(varDef.getUnPrimedName()).equals(varDef)) {
+            throw new Error("Error: variable \"" + varDef.getVar() + "\" was already defined in this scope (" + varsDefs.get(varDef.getVar().getUnPrimedName()) + ".");
         }
-        varsDefs.put(varDef.getName(), varDef);
+        varsDefs.put(varDef.getVar().getUnPrimedName(), varDef);
     }
 
     public void addDef(FunDef funDef) {
-        if (funsDefs.containsKey(funDef.getName())) {
-            throw new Error("Error: function \"" + funDef.getName() + "\" was already defined in this scope.");
+        if (funsDefs.containsKey(funDef.getUnPrimedName()) && !funsDefs.get(funDef.getUnPrimedName()).equals(funDef)) {
+            throw new Error("Error: function \"" + funDef.getUnPrimedName() + "\" was already defined in this scope.");
         }
-        funDef.getDomain().getElements().forEach(value -> addDef(new VarDef<>(funDef.getName() + "!" + value, funDef.getCoDomain())));
-        funsDefs.put(funDef.getName(), funDef);
+        funDef.getDomain().getElements().forEach(element -> addDef(new VarDef<>(new FunVar(funDef.getUnPrimedName(), element.toString()), funDef.getCoDomain())));
+        funsDefs.put(funDef.getUnPrimedName(), funDef);
     }
 
     public LinkedHashMap<String, Int> getConstsDefs() {

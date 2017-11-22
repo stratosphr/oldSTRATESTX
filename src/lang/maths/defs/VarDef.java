@@ -1,5 +1,6 @@
 package lang.maths.defs;
 
+import lang.maths.exprs.arith.AVar;
 import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.ISMTFormatter;
@@ -10,8 +11,11 @@ import visitors.formatters.interfaces.ISMTFormatter;
  */
 public final class VarDef<Domain extends ASetExpr> extends ADef<Domain> {
 
-    public VarDef(String name, Domain domain) {
-        super(name, domain);
+    private final AVar var;
+
+    public VarDef(AVar var, Domain domain) {
+        super(var.getRealName(), domain);
+        this.var = var;
     }
 
     @Override
@@ -22,6 +26,10 @@ public final class VarDef<Domain extends ASetExpr> extends ADef<Domain> {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    public AVar getVar() {
+        return var;
     }
 
 }

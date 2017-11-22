@@ -46,7 +46,7 @@ public final class Primer implements IPrimer {
 
     @Override
     public FunVar visit(FunVar funVar) {
-        return new FunVar(funVar.getUnPrimedName(), isPriming);
+        return new FunVar(funVar.getFunName(), funVar.getParameter(), isPriming);
     }
 
     @Override

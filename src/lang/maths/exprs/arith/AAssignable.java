@@ -1,6 +1,5 @@
 package lang.maths.exprs.arith;
 
-import visitors.formatters.Primer;
 import visitors.formatters.interfaces.IPrimer;
 
 /**
@@ -10,19 +9,19 @@ import visitors.formatters.interfaces.IPrimer;
 public abstract class AAssignable extends AArithExpr {
 
     private final String unPrimedName;
-    private final boolean isPrimed;
     private final String primedName;
     private final String realName;
+    private final boolean isPrimed;
 
-    AAssignable(String unPrimedName) {
-        this(unPrimedName, false);
+    AAssignable(String unPrimedName, String primedName) {
+        this(unPrimedName, primedName, false);
     }
 
-    AAssignable(String unPrimedName, boolean isPrimed) {
+    AAssignable(String unPrimedName, String primedName, boolean isPrimed) {
         this.unPrimedName = unPrimedName;
-        this.isPrimed = isPrimed;
-        this.primedName = unPrimedName + Primer.getSuffix();
+        this.primedName = primedName;
         this.realName = isPrimed ? primedName : unPrimedName;
+        this.isPrimed = isPrimed;
     }
 
     @Override
