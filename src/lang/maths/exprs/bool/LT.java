@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.exprs.arith.AArithExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -10,7 +11,7 @@ import visitors.formatters.interfaces.ISMTFormatter;
  */
 public final class LT extends ABinaryBoolExpr<AArithExpr> {
 
-    LT(AArithExpr left, AArithExpr right) {
+    public LT(AArithExpr left, AArithExpr right) {
         super(left, right);
     }
 
@@ -22,6 +23,11 @@ public final class LT extends ABinaryBoolExpr<AArithExpr> {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public LT accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

@@ -2,8 +2,9 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.AGenericTypeExpr;
+import lang.maths.exprs.arith.AVar;
 import lang.maths.exprs.arith.Fun;
-import lang.maths.exprs.arith.Var;
+import visitors.formatters.interfaces.IPrimer;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -14,18 +15,21 @@ import java.util.stream.Stream;
  * Created by gvoiron on 19/11/17.
  * Time : 14:54
  */
-abstract class ABinaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExpr {
+abstract class ABinaryBoolExpr<Operand extends AGenericTypeExpr<Operand>> extends ABoolExpr {
 
-    private final T left;
-    private final T right;
+    private final Operand left;
+    private final Operand right;
 
-    ABinaryBoolExpr(T left, T right) {
+    ABinaryBoolExpr(Operand left, Operand right) {
         this.left = left;
         this.right = right;
     }
 
     @Override
-    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public abstract ABinaryBoolExpr<Operand> accept(IPrimer primer);
+
+    @Override
+    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
@@ -34,11 +38,11 @@ abstract class ABinaryBoolExpr<T extends AGenericTypeExpr> extends ABoolExpr {
         return Stream.of(left.getFuns(defsContext), right.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public final T getLeft() {
+    public final Operand getLeft() {
         return left;
     }
 
-    public final T getRight() {
+    public final Operand getRight() {
         return right;
     }
 

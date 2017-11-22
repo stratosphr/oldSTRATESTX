@@ -1,6 +1,7 @@
 package lang.maths.exprs.bool;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -21,6 +22,11 @@ public final class Or extends ANaryBoolExpr<ABoolExpr> {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Or accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

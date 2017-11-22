@@ -144,30 +144,30 @@
 
     <initialisation>
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="Status"/>
                 <enum-value name="off"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Pot"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Balance"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="CoffeeLeft"/>
                 <const name="MaxCoffee"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="AskCoffee"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="AskChange"/>
                 <int value="0"/>
-            </assignment>
+            </var-assignment>
         </assignments>
     </initialisation>
 
@@ -205,13 +205,13 @@
                         </equals>
                     </or>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Balance"/>
                     <plus>
                         <var name="Balance"/>
                         <int value="50"/>
                     </plus>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -247,13 +247,13 @@
                         </equals>
                     </or>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Balance"/>
                     <plus>
                         <var name="Balance"/>
                         <int value="100"/>
                     </plus>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -280,22 +280,22 @@
                     </or>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Status"/>
                         <enum-value name="on"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Balance"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="AskCoffee"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="AskChange"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -326,10 +326,10 @@
                         <enum-value name="error"/>
                     </equals>
                 </or>
-                <assignment>
+                <var-assignment>
                     <var name="Status"/>
                     <enum-value name="off"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -339,10 +339,10 @@
                     <var name="Status"/>
                     <enum-value name="on"/>
                 </equals>
-                <assignment>
+                <var-assignment>
                     <var name="Status"/>
                     <enum-value name="error"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -370,10 +370,10 @@
                         </equals>
                     </or>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Pot"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -403,10 +403,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="AskCoffee"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -430,10 +430,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="AskChange"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -474,13 +474,13 @@
                             <var name="CoffeeLeft"/>
                         </gt>
                     </and>
-                    <assignment>
+                    <var-assignment>
                         <var name="CoffeeLeft"/>
                         <plus>
                             <var name="CoffeeLeft"/>
                             <var name="x"/>
                         </plus>
-                    </assignment>
+                    </var-assignment>
                 </select>
             </any>
         </event>
@@ -532,39 +532,39 @@
                         </gt>
                     </and>
                     <assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="Status"/>
                             <enum-value name="error"/>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="AskChange"/>
                             <int value="1"/>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="AskCoffee"/>
                             <int value="0"/>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="Balance"/>
                             <minus>
                                 <var name="Balance"/>
                                 <int value="50"/>
                             </minus>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="CoffeeLeft"/>
                             <minus>
                                 <var name="CoffeeLeft"/>
                                 <int value="1"/>
                             </minus>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="Pot"/>
                             <plus>
                                 <var name="Pot"/>
                                 <int value="50"/>
                             </plus>
-                        </assignment>
+                        </var-assignment>
                     </assignments>
                     <if-then-else>
                         <or>
@@ -581,35 +581,35 @@
                             </equals>
                         </or>
                         <assignments>
-                            <assignment>
+                            <var-assignment>
                                 <var name="Status"/>
                                 <enum-value name="error"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="AskCoffee"/>
                                 <int value="0"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="Balance"/>
                                 <minus>
                                     <var name="Balance"/>
                                     <int value="50"/>
                                 </minus>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="CoffeeLeft"/>
                                 <minus>
                                     <var name="CoffeeLeft"/>
                                     <int value="1"/>
                                 </minus>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="Pot"/>
                                 <plus>
                                     <var name="Pot"/>
                                     <int value="50"/>
                                 </plus>
-                            </assignment>
+                            </var-assignment>
                         </assignments>
                         <if-then-else>
                             <gt>
@@ -617,62 +617,62 @@
                                 <int value="50"/>
                             </gt>
                             <assignments>
-                                <assignment>
+                                <var-assignment>
                                     <var name="AskChange"/>
                                     <int value="1"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="AskCoffee"/>
                                     <int value="0"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="Balance"/>
                                     <minus>
                                         <var name="Balance"/>
                                         <int value="50"/>
                                     </minus>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="CoffeeLeft"/>
                                     <minus>
                                         <var name="CoffeeLeft"/>
                                         <int value="1"/>
                                     </minus>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="Pot"/>
                                     <plus>
                                         <var name="Pot"/>
                                         <int value="50"/>
                                     </plus>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <assignments>
-                                <assignment>
+                                <var-assignment>
                                     <var name="AskCoffee"/>
                                     <int value="0"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="Balance"/>
                                     <minus>
                                         <var name="Balance"/>
                                         <int value="50"/>
                                     </minus>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="CoffeeLeft"/>
                                     <minus>
                                         <var name="CoffeeLeft"/>
                                         <int value="1"/>
                                     </minus>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <var-assignment>
                                     <var name="Pot"/>
                                     <plus>
                                         <var name="Pot"/>
                                         <int value="50"/>
                                     </plus>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                         </if-then-else>
                     </if-then-else>
@@ -697,14 +697,14 @@
                     </equals>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Balance"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="AskChange"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>

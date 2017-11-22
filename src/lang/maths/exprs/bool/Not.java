@@ -1,6 +1,7 @@
 package lang.maths.exprs.bool;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -21,6 +22,11 @@ public final class Not extends AUnaryBoolExpr<ABoolExpr> {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Not accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

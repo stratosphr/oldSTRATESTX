@@ -3,6 +3,7 @@ package lang.maths.exprs.arith;
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.bool.ABoolExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Collection;
@@ -37,7 +38,12 @@ public final class ArithITE extends AArithExpr {
     }
 
     @Override
-    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public ArithITE accept(IPrimer primer) {
+        return primer.visit(this);
+    }
+
+    @Override
+    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return Stream.of(condition.getVars(defsContext), thenPart.getVars(defsContext), elsePart.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.exprs.arith.AArithExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -22,6 +23,11 @@ public final class LEQ extends ABinaryBoolExpr<AArithExpr> {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public LEQ accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

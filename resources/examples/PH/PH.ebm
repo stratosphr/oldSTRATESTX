@@ -67,18 +67,18 @@
     </invariant>
     <initialisation>
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="Combine"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="NbEssai"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Etat"/>
                 <int value="4"/>
-            </assignment>
+            </var-assignment>
         </assignments>
     </initialisation>
     <events>
@@ -123,10 +123,10 @@
                                 <int value="0"/>
                             </equals>
                         </and>
-                        <assignment>
+                        <var-assignment>
                             <var name="Etat"/>
                             <int value="1"/>
-                        </assignment>
+                        </var-assignment>
                         <if-then-else>
                             <and>
                                 <equals>
@@ -138,10 +138,10 @@
                                     <int value="1"/>
                                 </equals>
                             </and>
-                            <assignment>
+                            <var-assignment>
                                 <var name="Etat"/>
                                 <int value="3"/>
-                            </assignment>
+                            </var-assignment>
                             <if-then-else>
                                 <and>
                                     <equals>
@@ -153,10 +153,10 @@
                                         <int value="2"/>
                                     </equals>
                                 </and>
-                                <assignment>
+                                <var-assignment>
                                     <var name="Etat"/>
                                     <int value="1"/>
-                                </assignment>
+                                </var-assignment>
                                 <select>
                                     <and>
                                         <equals>
@@ -168,10 +168,10 @@
                                             <int value="3"/>
                                         </equals>
                                     </and>
-                                    <assignment>
+                                    <var-assignment>
                                         <var name="Etat"/>
                                         <int value="1"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </select>
                             </if-then-else>
                         </if-then-else>
@@ -198,26 +198,26 @@
                         <var name="Etat"/>
                         <int value="2"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="Etat"/>
                         <int value="5"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <equals>
                             <var name="NbEssai"/>
                             <int value="2"/>
                         </equals>
-                        <assignment>
+                        <var-assignment>
                             <var name="Etat"/>
                             <int value="5"/>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="NbEssai"/>
                             <plus>
                                 <var name="NbEssai"/>
                                 <int value="1"/>
                             </plus>
-                        </assignment>
+                        </var-assignment>
                     </if-then-else>
                 </if-then-else>
             </select>
@@ -235,18 +235,18 @@
                     </equals>
                 </or>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Etat"/>
                         <int value="4"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Combine"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="NbEssai"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -257,14 +257,14 @@
                     <int value="0"/>
                 </equals>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Combine"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Etat"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>

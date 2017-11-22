@@ -3,6 +3,7 @@ package lang.maths.exprs.bool;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.Var;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Arrays;
@@ -25,6 +26,11 @@ public final class ForAll extends AQuantifier {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public ForAll accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

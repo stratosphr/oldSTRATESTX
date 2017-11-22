@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.exprs.arith.AArithExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -12,6 +13,11 @@ public final class GEQ extends ABinaryBoolExpr<AArithExpr> {
 
     public GEQ(AArithExpr left, AArithExpr right) {
         super(left, right);
+    }
+
+    @Override
+    public GEQ accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
     @Override

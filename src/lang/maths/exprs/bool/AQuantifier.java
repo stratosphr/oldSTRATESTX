@@ -2,8 +2,9 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.defs.VarDef;
+import lang.maths.exprs.arith.AVar;
 import lang.maths.exprs.arith.Fun;
-import lang.maths.exprs.arith.Var;
+import visitors.formatters.interfaces.IPrimer;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -26,7 +27,10 @@ public abstract class AQuantifier extends ABoolExpr {
     }
 
     @Override
-    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public abstract AQuantifier accept(IPrimer primer);
+
+    @Override
+    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return expr.getVars(defsContext);
     }
 

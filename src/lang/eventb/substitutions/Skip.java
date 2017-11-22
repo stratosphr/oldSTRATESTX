@@ -1,5 +1,8 @@
 package lang.eventb.substitutions;
 
+import lang.maths.defs.DefsContext;
+import lang.maths.exprs.bool.ABoolExpr;
+import lang.maths.exprs.bool.True;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 /**
@@ -11,6 +14,11 @@ public final class Skip extends ASubstitution {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public ABoolExpr getPrd(DefsContext defsContext) {
+        return new True();
     }
 
 }

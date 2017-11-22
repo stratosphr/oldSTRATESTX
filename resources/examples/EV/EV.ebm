@@ -138,90 +138,90 @@
 
     <initialisation>
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="PC"/>
                 <enum-value name="fermees"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Pos"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Dir"/>
                 <int value="1"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <fun-assignment>
                 <fun name="PE">
                     <int value="0"/>
                 </fun>
                 <enum-value name="fermees"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="PE">
                     <int value="1"/>
                 </fun>
                 <enum-value name="fermees"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="PE">
                     <int value="2"/>
                 </fun>
                 <enum-value name="fermees"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BC">
                     <int value="0"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BC">
                     <int value="1"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BC">
                     <int value="2"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BM">
                     <int value="0"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BM">
                     <int value="1"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BM">
                     <int value="2"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BD">
                     <int value="0"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BD">
                     <int value="1"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="BD">
                     <int value="2"/>
                 </fun>
                 <int value="0"/>
-            </assignment>
+            </fun-assignment>
         </assignments>
     </initialisation>
 
@@ -246,12 +246,12 @@
                     </fun>
                     <int value="0"/>
                 </equals>
-                <assignment>
+                <fun-assignment>
                     <fun name="BM">
                         <var name="etage"/>
                     </fun>
                     <int value="1"/>
-                </assignment>
+                </fun-assignment>
             </any>
         </event>
 
@@ -271,12 +271,12 @@
                     </fun>
                     <int value="0"/>
                 </equals>
-                <assignment>
+                <fun-assignment>
                     <fun name="BD">
                         <var name="etage"/>
                     </fun>
                     <int value="1"/>
-                </assignment>
+                </fun-assignment>
             </any>
         </event>
 
@@ -299,12 +299,12 @@
                     </fun>
                     <int value="0"/>
                 </equals>
-                <assignment>
+                <fun-assignment>
                     <fun name="BC">
                         <var name="etage"/>
                     </fun>
                     <int value="1"/>
-                </assignment>
+                </fun-assignment>
             </any>
         </event>
 
@@ -327,12 +327,12 @@
                     </fun>
                     <int value="0"/>
                 </equals>
-                <assignment>
+                <fun-assignment>
                     <fun name="BC">
                         <var name="etage"/>
                     </fun>
                     <int value="1"/>
-                </assignment>
+                </fun-assignment>
             </any>
         </event>
 
@@ -350,10 +350,10 @@
                         <enum-value name="fermees"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="PC"/>
                     <enum-value name="ouvertes"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -371,10 +371,10 @@
                         <enum-value name="ouvertes"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="PC"/>
                     <enum-value name="refermees"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -392,12 +392,12 @@
                         <enum-value name="fermees"/>
                     </equals>
                 </and>
-                <assignment>
+                <fun-assignment>
                     <fun name="PE">
                         <var name="Pos"/>
                     </fun>
                     <enum-value name="ouvertes"/>
-                </assignment>
+                </fun-assignment>
             </select>
         </event>
 
@@ -415,12 +415,12 @@
                         <enum-value name="refermees"/>
                     </equals>
                 </and>
-                <assignment>
+                <fun-assignment>
                     <fun name="PE">
                         <var name="Pos"/>
                     </fun>
                     <enum-value name="fermees"/>
-                </assignment>
+                </fun-assignment>
             </select>
         </event>
 
@@ -491,14 +491,14 @@
                     </or>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Pos"/>
                         <plus>
                             <var name="Pos"/>
                             <var name="Dir"/>
                         </plus>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <fun-assignment>
                         <fun name="BC">
                             <plus>
                                 <var name="Pos"/>
@@ -506,8 +506,8 @@
                             </plus>
                         </fun>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="BM">
                             <plus>
                                 <var name="Pos"/>
@@ -515,11 +515,11 @@
                             </plus>
                         </fun>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <var-assignment>
                         <var name="PC"/>
                         <enum-value name="fermees"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -591,14 +591,14 @@
                     </or>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Pos"/>
                         <plus>
                             <var name="Pos"/>
                             <var name="Dir"/>
                         </plus>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <fun-assignment>
                         <fun name="BC">
                             <plus>
                                 <var name="Pos"/>
@@ -606,8 +606,8 @@
                             </plus>
                         </fun>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="BD">
                             <plus>
                                 <var name="Pos"/>
@@ -615,11 +615,11 @@
                             </plus>
                         </fun>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <var-assignment>
                         <var name="PC"/>
                         <enum-value name="fermees"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -774,13 +774,13 @@
                         </and>
                     </or>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Dir"/>
                     <times>
                         <int value="-1"/>
                         <var name="Dir"/>
                     </times>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 

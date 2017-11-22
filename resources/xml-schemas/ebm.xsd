@@ -21,31 +21,15 @@
     <xs:element name="model">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="sets-defs" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="consts-defs" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="sets-defs" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="vars-defs" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="funs-defs" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="invariant"/>
-                <xs:element ref="initialisation"/>
+                <xs:element ref="invariant" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="initialisation" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="events"/>
             </xs:all>
             <xs:attribute name="name" type="name" use="required"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="sets-defs">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="set-def" minOccurs="1" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="set-def">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="set-expr-non-named"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="identifier" use="required"/>
         </xs:complexType>
     </xs:element>
 
@@ -60,6 +44,22 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="arith-expr-non-enum"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="identifier" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sets-defs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="set-def" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="set-def">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="set-expr-non-named"/>
             </xs:sequence>
             <xs:attribute name="name" type="identifier" use="required"/>
         </xs:complexType>
@@ -342,10 +342,19 @@
 
     <!-- SUBSTITUTIONS ********************************************* -->
     <xs:element name="substitution" abstract="true"/>
-    <xs:element name="assignment" substitutionGroup="substitution">
+    <xs:element name="assignment" abstract="true" substitutionGroup="substitution"/>
+    <xs:element name="var-assignment" substitutionGroup="assignment">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="assignable"/>
+                <xs:element ref="var"/>
+                <xs:element ref="arith-expr"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="fun-assignment" substitutionGroup="assignment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fun"/>
                 <xs:element ref="arith-expr"/>
             </xs:sequence>
         </xs:complexType>

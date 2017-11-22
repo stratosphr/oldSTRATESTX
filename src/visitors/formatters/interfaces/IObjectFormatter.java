@@ -1,7 +1,8 @@
 package visitors.formatters.interfaces;
 
 import lang.eventb.Event;
-import lang.eventb.substitutions.Skip;
+import lang.eventb.Machine;
+import lang.eventb.substitutions.*;
 import lang.maths.exprs.set.Enum;
 import lang.maths.exprs.set.Range;
 import lang.maths.exprs.set.Set;
@@ -31,8 +32,22 @@ public interface IObjectFormatter extends ISMTFormatter {
 
     String visit(Range range);
 
+    String visit(Machine machine);
+
     String visit(Event event);
 
     String visit(Skip skip);
+
+    String visit(Assignments assignments);
+
+    String visit(VarAssignment varAssignment);
+
+    String visit(FunAssignment funAssignment);
+
+    String visit(Select select);
+
+    String visit(Choice choice);
+
+    String visit(Any any);
 
 }

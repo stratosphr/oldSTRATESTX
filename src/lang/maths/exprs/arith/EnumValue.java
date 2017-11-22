@@ -2,6 +2,7 @@ package lang.maths.exprs.arith;
 
 import lang.AObject;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.LinkedHashMap;
@@ -12,12 +13,15 @@ import java.util.LinkedHashMap;
  */
 public final class EnumValue extends AValue {
 
-    private static final LinkedHashMap<String, Int> enumvalues = new LinkedHashMap<>();
+    // TODO: FIND A WAY TO RESET enumValues WHEN CREATING A NEW MACHINE TO FREE MEMORY FROM USELESS EnumValues
+    private static final LinkedHashMap<String, Int> enumValues = new LinkedHashMap<>();
     private final String name;
 
     public EnumValue(String name) {
-        super(enumvalues.containsKey(name) ? enumvalues.get(name).getValue() : enumvalues.size());
-        enumvalues.put(name, new Int(enumvalues.size()));
+        super(enumValues.containsKey(name) ? enumValues.get(name).getValue() : enumValues.size());
+        if (!enumValues.containsKey(name)) {
+            enumValues.put(name, new Int(enumValues.size()));
+        }
         this.name = name;
     }
 
@@ -31,13 +35,18 @@ public final class EnumValue extends AValue {
         return formatter.visit(this);
     }
 
+    @Override
+    public EnumValue accept(IPrimer primer) {
+        return primer.visit(this);
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public int compareTo(AObject object) {
-        return enumvalues.get(name).compareTo(enumvalues.get(((EnumValue) object).getName()));
+        return enumValues.get(name).compareTo(enumValues.get(((EnumValue) object).getName()));
     }
 
 }

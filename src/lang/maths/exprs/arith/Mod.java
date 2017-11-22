@@ -1,16 +1,17 @@
 package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
  * Created by gvoiron on 16/11/17.
  * Time : 21:44
  */
-public final class Mod extends ANaryArithExpr<AArithExpr> {
+public final class Mod extends ABinaryArithExpr<AArithExpr> {
 
-    public Mod(AArithExpr... operands) {
-        super(operands);
+    public Mod(AArithExpr left, AArithExpr right) {
+        super(left, right);
     }
 
     @Override
@@ -21,6 +22,11 @@ public final class Mod extends ANaryArithExpr<AArithExpr> {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Mod accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

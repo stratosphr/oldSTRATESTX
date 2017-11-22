@@ -68,10 +68,10 @@ public final class XMLNode implements IXMLFormattable {
             throw new Error("Error l." + line + ",c." + column + ": The node name \"" + name + "\" does not conform to the expected one (\"" + expectedName + "\").");
         }
         if (children.size() < minNbChildren) {
-            throw new Error("Error l." + line + ",c." + column + ": The number of children (" + children.size() + ") is less than the expected minimum number of children (\"" + minNbChildren + "\")");
+            throw new Error("Error l." + line + ",c." + column + ": The number of children for node \"" + name + "\" (" + children.size() + ") is less than the expected minimum number of children (\"" + minNbChildren + "\")");
         }
         if (maxNbChildren > 0 && children.size() > maxNbChildren) {
-            throw new Error("Error l." + line + ",c." + column + ": The number of children (" + children.size() + ") exceeds the expected maximum number of children (\"" + minNbChildren + "\")");
+            throw new Error("Error l." + line + ",c." + column + ": The number of children  for node \"" + name + "\" (" + children.size() + ") exceeds the expected maximum number of children (\"" + minNbChildren + "\")");
         }
         List<String> acceptedChildrenNamesList = Arrays.asList(acceptedChildrenNames);
         for (XMLNode child : children) {

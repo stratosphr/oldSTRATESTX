@@ -27,7 +27,7 @@ public final class Z3 {
             throw new Error(exception + "\nError while parsing the following code:\n" + formattedExpr);
         }
         Status status = solver.check();
-        return new Z3Result(expr, status, status == Status.SATISFIABLE ? new Model(solver.getModel(), context, defsContext) : null);
+        return new Z3Result(expr, defsContext, status, status == Status.SATISFIABLE ? new Model(solver.getModel(), context, defsContext) : null);
     }
 
 }

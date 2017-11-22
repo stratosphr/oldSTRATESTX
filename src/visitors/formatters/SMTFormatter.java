@@ -19,8 +19,8 @@ public final class SMTFormatter extends GenericExprFormatter {
     private final DefsContext defsContext;
     private final int foldingLimit;
     private final LinkedHashSet<Fun> funs;
-    private boolean isVisitingBoolExpr;
     private LinkedHashSet<AArithExpr> quantifiedVars;
+    private boolean isVisitingBoolExpr;
 
     public SMTFormatter(DefsContext defsContext) {
         this(defsContext, 80);
@@ -31,8 +31,8 @@ public final class SMTFormatter extends GenericExprFormatter {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
         this.funs = new LinkedHashSet<>();
-        this.isVisitingBoolExpr = false;
         this.quantifiedVars = new LinkedHashSet<>();
+        this.isVisitingBoolExpr = false;
     }
 
     private String fold(String formatted) {
@@ -42,6 +42,7 @@ public final class SMTFormatter extends GenericExprFormatter {
         return formatted;
     }
 
+    // TODO: FIX THESE TWO MESSY FUNCTIONS
     private String formatArithExpr(String formatted) {
         return formatted;
     }
@@ -53,7 +54,7 @@ public final class SMTFormatter extends GenericExprFormatter {
         }
         String formatted;
         if (expr instanceof AQuantifier) {
-            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getName().equals(varDef.getName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new));
+            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
             ABoolExpr quantifiedExpr;
             if (expr instanceof ForAll) {
                 quantifiedExpr = new Implies(funsConstraint, ((ForAll) expr).getExpr());
@@ -72,14 +73,11 @@ public final class SMTFormatter extends GenericExprFormatter {
             String oldFormatted = formatted;
             formatted = defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name).accept(this) + ")")).collect(Collectors.joining());
             formatted += defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getVarsDefs().get(name).accept(this))).collect(Collectors.joining());
-            formatted += line();
-            formatted += line("(assert " + new And(
-                    new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getVarsDefs().get(name).getDomain())).toArray(ABoolExpr[]::new)),
-                    new And(funs.stream().map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getName()).getDomain())).toArray(ABoolExpr[]::new))
-            ).accept(this) + ")");
-            formatted += line();
-            formatted += defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getFunsDefs().get(name).accept(this))).collect(Collectors.joining());
-            formatted += line();
+            formatted += defsContext.getVarsDefs().isEmpty() && funs.isEmpty() ? "" : line();
+            formatted += defsContext.getVarsDefs().isEmpty() ? "" : line("(assert " + new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getVarsDefs().get(name).getDomain())).toArray(ABoolExpr[]::new)).accept(this) + ")");
+            formatted += funs.isEmpty() ? "" : line("(assert " + new And(funs.stream().map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getRealName()).getDomain())).toArray(ABoolExpr[]::new)).accept(this) + ")");
+            formatted += defsContext.getFunsDefs().isEmpty() ? "" : line() + defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getFunsDefs().get(name).accept(this))).collect(Collectors.joining());
+            formatted += defsContext.getConstsDefs().isEmpty() && defsContext.getVarsDefs().isEmpty() && defsContext.getFunsDefs().isEmpty() ? "" : line();
             formatted += "(assert " + oldFormatted + ")";
         }
         return formatted;
@@ -109,6 +107,9 @@ public final class SMTFormatter extends GenericExprFormatter {
 
     @Override
     public String visit(Const aConst) {
+        if (!defsContext.getConstsDefs().containsKey(aConst.getName())) {
+            defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue()));
+        }
         return aConst.getName();
     }
 
@@ -124,15 +125,29 @@ public final class SMTFormatter extends GenericExprFormatter {
 
     @Override
     public String visit(Var var) {
-        return formatArithExpr(var.getName());
+        if (var.isPrimed() && !defsContext.getVarsDefs().containsKey(var.getPrimedName())) {
+            defsContext.addDef(new VarDef<>(var.getPrimedName(), defsContext.getVarsDefs().get(var.getUnPrimedName()).getDomain()));
+        }
+        return formatArithExpr(var.getRealName());
+    }
+
+    @Override
+    public String visit(FunVar funVar) {
+        if (funVar.isPrimed() && !defsContext.getVarsDefs().containsKey(funVar.getPrimedName())) {
+            defsContext.addDef(new VarDef<>(funVar.getPrimedName(), defsContext.getVarsDefs().get(funVar.getUnPrimedName()).getDomain()));
+        }
+        return formatArithExpr(funVar.getRealName());
     }
 
     @Override
     public String visit(Fun fun) {
+        if (fun.isPrimed() && !defsContext.getFunsDefs().containsKey(fun.getPrimedName())) {
+            defsContext.addDef(new FunDef(fun.getPrimedName(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getCoDomain()));
+        }
         if (!quantifiedVars.contains(fun.getParameter())) {
             funs.add(fun);
         }
-        return fold(formatArithExpr("(" + fun.getName() + " " + fun.getParameter().accept(this) + ")"));
+        return fold(formatArithExpr("(" + fun.getRealName() + " " + fun.getParameter().accept(this) + ")"));
     }
 
     @Override
@@ -157,7 +172,7 @@ public final class SMTFormatter extends GenericExprFormatter {
 
     @Override
     public String visit(Mod mod) {
-        return fold(formatArithExpr(line("(mod") + indentRight() + mod.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")")));
+        return fold(formatArithExpr(line("(mod") + indentRight() + indentLine(mod.getLeft().accept(this)) + indentLine(mod.getRight().accept(this)) + indentLeft() + indent(")")));
     }
 
     @Override
@@ -193,6 +208,11 @@ public final class SMTFormatter extends GenericExprFormatter {
     @Override
     public String visit(Equals equals) {
         return fold(formatBoolExpr("=", equals, equals.getOperands()));
+    }
+
+    @Override
+    public String visit(NotEquals notEquals) {
+        return new Not(new Equals(notEquals.getLeft(), notEquals.getRight())).accept(this);
     }
 
     @Override
@@ -241,6 +261,11 @@ public final class SMTFormatter extends GenericExprFormatter {
         String formatted = formatBoolExpr("exists", exists, new ArrayList<>());
         quantifiedVars = oldQuantifiedVars;
         return formatted;
+    }
+
+    @Override
+    public String visit(Invariant invariant) {
+        return invariant.getExpr().accept(this);
     }
 
 }

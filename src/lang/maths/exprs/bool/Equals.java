@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.exprs.arith.AArithExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -22,6 +23,11 @@ public final class Equals extends ANaryBoolExpr<AArithExpr> {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Equals accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

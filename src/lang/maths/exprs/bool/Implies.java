@@ -1,6 +1,7 @@
 package lang.maths.exprs.bool;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -21,6 +22,11 @@ public final class Implies extends ABinaryBoolExpr<ABoolExpr> {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Implies accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
     public ABoolExpr getCondition() {

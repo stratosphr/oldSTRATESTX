@@ -13,20 +13,20 @@ import java.util.TreeSet;
  */
 public abstract class AFiniteSetExpr extends ASetExpr {
 
-    public abstract TreeSet<AArithExpr> getElements();
+    public abstract TreeSet<? extends AArithExpr> getElements();
+
+    @Override
+    public ABoolExpr getDomainConstraint(AArithExpr expr) {
+        return new Or(getElements().stream().map(value -> new Equals(expr, value)).toArray(ABoolExpr[]::new));
+    }
 
     public final int size() {
         return getElements().size();
     }
 
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return getElements().isEmpty();
-    }
-
-    @Override
-    public ABoolExpr getDomainConstraint(AArithExpr expr) {
-        return new Or(getElements().stream().map(value -> new Equals(expr, value)).toArray(ABoolExpr[]::new));
     }
 
 }

@@ -47,32 +47,32 @@
 
     <initialisation>
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="h"/>
                 <enum-value name="tac"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="sw"/>
                 <int value="1"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <fun-assignment>
                 <fun name="bat">
                     <int value="1"/>
                 </fun>
                 <enum-value name="ok"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="bat">
                     <int value="2"/>
                 </fun>
                 <enum-value name="ok"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="bat">
                     <int value="3"/>
                 </fun>
                 <enum-value name="ok"/>
-            </assignment>
+            </fun-assignment>
             <!--<assignment>
                 <fun name="bat">
                     <int value="4"/>
@@ -114,10 +114,10 @@
                     <var name="h"/>
                     <enum-value name="tac"/>
                 </equals>
-                <assignment>
+                <var-assignment>
                     <var name="h"/>
                     <enum-value name="tic"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -181,14 +181,14 @@
                         </neq>
                     </and>
                     <assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="h"/>
                             <enum-value name="tac"/>
-                        </assignment>
-                        <assignment>
+                        </var-assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <var name="ns"/>
-                        </assignment>
+                        </var-assignment>
                     </assignments>
                 </any>
             </any>
@@ -273,16 +273,16 @@
                                     </equals>
                                 </and>
                                 <assignments>
-                                    <assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <var name="ns"/>
-                                    </assignment>
-                                    <assignment>
+                                    </var-assignment>
+                                    <fun-assignment>
                                         <fun name="bat">
                                             <var name="nb"/>
                                         </fun>
                                         <enum-value name="ko"/>
-                                    </assignment>
+                                    </fun-assignment>
                                 </assignments>
                             </any>
                         </select>
@@ -291,12 +291,12 @@
                                 <var name="nb"/>
                                 <var name="sw"/>
                             </neq>
-                            <assignment>
+                            <fun-assignment>
                                 <fun name="bat">
                                     <var name="nb"/>
                                 </fun>
                                 <enum-value name="ko"/>
-                            </assignment>
+                            </fun-assignment>
                         </select>
                     </choice>
                 </any>
@@ -321,12 +321,12 @@
                         <enum-value name="ko"/>
                     </equals>
                 </and>
-                <assignment>
+                <fun-assignment>
                     <fun name="bat">
                         <var name="nb"/>
                     </fun>
                     <enum-value name="ok"/>
-                </assignment>
+                </fun-assignment>
             </any>
         </event>
 

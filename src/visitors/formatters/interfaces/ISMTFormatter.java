@@ -23,6 +23,8 @@ public interface ISMTFormatter {
 
     String visit(Var var);
 
+    String visit(FunVar funVar);
+
     String visit(Fun fun);
 
     String visit(Plus plus);
@@ -49,6 +51,8 @@ public interface ISMTFormatter {
 
     String visit(Equals equals);
 
+    String visit(NotEquals notEquals);
+
     String visit(LT lt);
 
     String visit(LEQ leq);
@@ -64,5 +68,7 @@ public interface ISMTFormatter {
     String visit(ForAll forAll);
 
     String visit(Exists exists);
+
+    String visit(Invariant invariant);
 
 }

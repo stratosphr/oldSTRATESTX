@@ -309,54 +309,54 @@
     <initialisation>
 
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="Do"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Lo"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="AC"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Be"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Li"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Wa"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="De"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Tr"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Mv"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="CS"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Gl"/>
                 <int value="0"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="Us"/>
                 <int value="1"/>
-            </assignment>
+            </var-assignment>
         </assignments>
 
     </initialisation>
@@ -384,14 +384,14 @@
                     </equals>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Wa"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Be"/>
                         <int value="1"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -417,14 +417,14 @@
                     </equals>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Wa"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Be"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -465,10 +465,10 @@
                         </and>
                     </or>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Do"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -492,10 +492,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Do"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -520,26 +520,26 @@
                     </equals>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Us"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Be"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Wa"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="AC"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Lo"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -572,10 +572,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Us"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -599,10 +599,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="AC"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -639,18 +639,18 @@
                     </gt>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="AC"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Tr"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="De"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -688,22 +688,22 @@
                     </equals>
                 </and>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="Lo"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Li"/>
                         <int value="0"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="Tr"/>
                         <int value="1"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="De"/>
                         <int value="0"/>
-                    </assignment>
+                    </var-assignment>
                 </assignments>
             </select>
         </event>
@@ -728,10 +728,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Lo"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -751,10 +751,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Gl"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -774,10 +774,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Gl"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -805,10 +805,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="CS"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -836,10 +836,10 @@
                         <int value="1"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="CS"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -867,10 +867,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Mv"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -898,10 +898,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Mv"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -925,10 +925,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Li"/>
                     <int value="1"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -952,10 +952,10 @@
                         <int value="0"/>
                     </equals>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="Li"/>
                     <int value="0"/>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 
@@ -971,13 +971,13 @@
                         <var name="De"/>
                     </gt>
                 </and>
-                <assignment>
+                <var-assignment>
                     <var name="De"/>
                     <plus>
                         <var name="De"/>
                         <int value="1"/>
                     </plus>
-                </assignment>
+                </var-assignment>
             </select>
         </event>
 

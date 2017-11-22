@@ -412,146 +412,146 @@
 
     <initialisation>
         <assignments>
-            <assignment>
+            <var-assignment>
                 <var name="currentFile"/>
                 <enum-value name="nofiles"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="currentDirectory"/>
                 <enum-value name="mf"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <fun-assignment>
                 <fun name="counterChv">
                     <enum-value name="chv1"/>
                 </fun>
                 <const name="MaxChv"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="counterChv">
                     <enum-value name="chv2"/>
                 </fun>
                 <const name="MaxChv"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="counterUnblock">
                     <enum-value name="chv1"/>
                 </fun>
                 <const name="MaxUnblock"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="counterUnblock">
                     <enum-value name="chv2"/>
                 </fun>
                 <const name="MaxUnblock"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="codeChv">
                     <enum-value name="chv1"/>
                 </fun>
                 <enum-value name="a1"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="codeChv">
                     <enum-value name="chv2"/>
                 </fun>
                 <enum-value name="a2"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <var-assignment>
                 <var name="enabledChv1Status"/>
                 <enum-value name="enabled"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <fun-assignment>
                 <fun name="blockedChvStatus">
                     <enum-value name="chv1"/>
                 </fun>
                 <enum-value name="unblocked"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="blockedChvStatus">
                     <enum-value name="chv2"/>
                 </fun>
                 <enum-value name="unblocked"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="blockedStatus">
                     <enum-value name="chv1"/>
                 </fun>
                 <enum-value name="unblocked"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="blockedStatus">
                     <enum-value name="chv2"/>
                 </fun>
                 <enum-value name="unblocked"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="permissionSession">
                     <enum-value name="always"/>
                 </fun>
                 <enum-value name="ltgTrue"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="permissionSession">
                     <enum-value name="chv1"/>
                 </fun>
                 <enum-value name="ltgFalse"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="permissionSession">
                     <enum-value name="chv2"/>
                 </fun>
                 <enum-value name="ltgFalse"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="permissionSession">
                     <enum-value name="adm"/>
                 </fun>
                 <enum-value name="ltgFalse"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="permissionSession">
                     <enum-value name="never"/>
                 </fun>
                 <enum-value name="ltgFalse"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="data">
                     <enum-value name="eficcid"/>
                 </fun>
                 <enum-value name="d1"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="data">
                     <enum-value name="eflp"/>
                 </fun>
                 <enum-value name="d2"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="data">
                     <enum-value name="efimsi"/>
                 </fun>
                 <enum-value name="d3"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="data">
                     <enum-value name="efkc"/>
                 </fun>
                 <enum-value name="d4"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <fun-assignment>
                 <fun name="data">
                     <enum-value name="efad"/>
                 </fun>
                 <enum-value name="d5"/>
-            </assignment>
-            <assignment>
+            </fun-assignment>
+            <var-assignment>
                 <var name="sw"/>
                 <enum-value name="sw9000"/>
-            </assignment>
-            <assignment>
+            </var-assignment>
+            <var-assignment>
                 <var name="ddOut"/>
                 <enum-value name="nodata"/>
-            </assignment>
+            </var-assignment>
         </assignments>
     </initialisation>
 
@@ -574,44 +574,44 @@
                     </equals>
                 </or>
                 <assignments>
-                    <assignment>
+                    <var-assignment>
                         <var name="currentFile"/>
                         <enum-value name="nofiles"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <var-assignment>
                         <var name="currentDirectory"/>
                         <enum-value name="mf"/>
-                    </assignment>
-                    <assignment>
+                    </var-assignment>
+                    <fun-assignment>
                         <fun name="permissionSession">
                             <enum-value name="always"/>
                         </fun>
                         <enum-value name="ltgTrue"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="permissionSession">
                             <enum-value name="chv1"/>
                         </fun>
                         <enum-value name="ltgFalse"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="permissionSession">
                             <enum-value name="chv2"/>
                         </fun>
                         <enum-value name="ltgFalse"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="permissionSession">
                             <enum-value name="adm"/>
                         </fun>
                         <enum-value name="ltgFalse"/>
-                    </assignment>
-                    <assignment>
+                    </fun-assignment>
+                    <fun-assignment>
                         <fun name="permissionSession">
                             <enum-value name="never"/>
                         </fun>
                         <enum-value name="ltgFalse"/>
-                    </assignment>
+                    </fun-assignment>
                 </assignments>
             </select>
         </event>
@@ -655,23 +655,23 @@
                             </equals>
                         </or>
                         <assignments>
-                            <assignment>
+                            <var-assignment>
                                 <var name="sw"/>
                                 <enum-value name="sw9000"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="currentDirectory"/>
                                 <var name="ff"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="currentFile"/>
                                 <var name="nofiles"/>
-                            </assignment>
+                            </var-assignment>
                         </assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9404"/>
-                        </assignment>
+                        </var-assignment>
                     </if-then-else>
                     <if-then-else>
                         <equals>
@@ -681,19 +681,19 @@
                             <var name="currentDirectory"/>
                         </equals>
                         <assignments>
-                            <assignment>
+                            <var-assignment>
                                 <var name="sw"/>
                                 <enum-value name="sw9000"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="currentFile"/>
                                 <var name="ff"/>
-                            </assignment>
+                            </var-assignment>
                         </assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9404"/>
-                        </assignment>
+                        </var-assignment>
                     </if-then-else>
                 </if-then-else>
             </any>
@@ -728,10 +728,10 @@
                         <var name="currentFile"/>
                         <enum-value name="nofiles"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9400"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <or>
                             <equals>
@@ -754,21 +754,21 @@
                             </equals>
                         </or>
                         <assignments>
-                            <assignment>
+                            <var-assignment>
                                 <var name="sw"/>
                                 <enum-value name="sw9000"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <var-assignment>
                                 <var name="ddOut"/>
                                 <fun name="data">
                                     <var name="currentFile"/>
                                 </fun>
-                            </assignment>
+                            </var-assignment>
                         </assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9804"/>
-                        </assignment>
+                        </var-assignment>
                     </if-then-else>
                 </if-then-else>
             </select>
@@ -808,10 +808,10 @@
                         <var name="currentFile"/>
                         <enum-value name="nofiles"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9400"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <or>
                             <equals>
@@ -834,21 +834,21 @@
                             </equals>
                         </or>
                         <assignments>
-                            <assignment>
+                            <var-assignment>
                                 <var name="sw"/>
                                 <enum-value name="sw9000"/>
-                            </assignment>
-                            <assignment>
+                            </var-assignment>
+                            <fun-assignment>
                                 <fun name="data">
                                     <var name="currentFile"/>
                                 </fun>
                                 <var name="dd"/>
-                            </assignment>
+                            </fun-assignment>
                         </assignments>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9804"/>
-                        </assignment>
+                        </var-assignment>
                     </if-then-else>
                 </if-then-else>
             </any>
@@ -888,10 +888,10 @@
                         </fun>
                         <enum-value name="blocked"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9840"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <and>
                             <equals>
@@ -903,10 +903,10 @@
                                 <enum-value name="disabled"/>
                             </equals>
                         </and>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <var name="sw9808"/>
-                        </assignment>
+                        </var-assignment>
                         <if-then-else>
                             <equals>
                                 <fun name="codeChv">
@@ -915,28 +915,28 @@
                                 <var name="oldCodeCc"/>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="codeChv">
                                         <var name="cc"/>
                                     </fun>
                                     <var name="newCodeCc"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <if-then-else>
                                 <equals>
@@ -946,31 +946,31 @@
                                     <int value="1"/>
                                 </equals>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <var name="cc"/>
                                         </fun>
                                         <int value="0"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="blockedChvStatus">
                                             <var name="cc"/>
                                         </fun>
                                         <enum-value name="blocked"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="permissionSession">
                                             <var name="cc"/>
                                         </fun>
                                         <enum-value name="ltgFalse"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9840"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <var name="cc"/>
                                         </fun>
@@ -980,11 +980,11 @@
                                             </fun>
                                             <int value="1"/>
                                         </minus>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9804"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                             </if-then-else>
                         </if-then-else>
@@ -1019,10 +1019,10 @@
                         </fun>
                         <enum-value name="blocked"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9840"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <and>
                             <equals>
@@ -1034,10 +1034,10 @@
                                 <enum-value name="disabled"/>
                             </equals>
                         </and>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9808"/>
-                        </assignment>
+                        </var-assignment>
                         <if-then-else>
                             <equals>
                                 <fun name="codeChv">
@@ -1046,22 +1046,22 @@
                                 <var name="codeCc"/>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <if-then-else>
                                 <equals>
@@ -1071,31 +1071,31 @@
                                     <int value="1"/>
                                 </equals>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <var name="cc"/>
                                         </fun>
                                         <int value="0"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="blockedChvStatus">
                                             <var name="cc"/>
                                         </fun>
                                         <enum-value name="blocked"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="permissionSession">
                                             <var name="cc"/>
                                         </fun>
                                         <enum-value name="ltgFalse"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9840"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <var name="cc"/>
                                         </fun>
@@ -1105,11 +1105,11 @@
                                             </fun>
                                             <int value="1"/>
                                         </minus>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9804"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                             </if-then-else>
                         </if-then-else>
@@ -1152,10 +1152,10 @@
                         </fun>
                         <enum-value name="blocked"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9840"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <equals>
                             <fun name="codeUnblock">
@@ -1169,80 +1169,80 @@
                                 <enum-value name="chv1"/>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <var-assignment>
                                     <var name="enabledChv1Status"/>
                                     <enum-value name="enabled"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <fun-assignment>
                                     <fun name="codeChv">
                                         <var name="cc"/>
                                     </fun>
                                     <var name="newCodeCc"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="blockedChvStatus">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="unblocked"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="counterUnblock">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxUnblock"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="codeChv">
                                         <var name="cc"/>
                                     </fun>
                                     <var name="newCodeCc"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="blockedChvStatus">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="unblocked"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="counterUnblock">
                                         <var name="cc"/>
                                     </fun>
                                     <const name="MaxUnblock"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                         </if-then-else>
                         <if-then-else>
@@ -1253,25 +1253,25 @@
                                 <int value="1"/>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="counterUnblock">
                                         <var name="cc"/>
                                     </fun>
                                     <int value="0"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <fun-assignment>
                                     <fun name="blockedStatus">
                                         <var name="cc"/>
                                     </fun>
                                     <enum-value name="blocked"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9840"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="counterUnblock">
                                         <var name="cc"/>
                                     </fun>
@@ -1281,11 +1281,11 @@
                                         </fun>
                                         <int value="1"/>
                                     </minus>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9804"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                         </if-then-else>
                     </if-then-else>
@@ -1313,19 +1313,19 @@
                         </fun>
                         <enum-value name="blocked"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9840"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <equals>
                             <var name="enabledChv1Status"/>
                             <enum-value name="enabled"/>
                         </equals>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9808"/>
-                        </assignment>
+                        </var-assignment>
                         <if-then-else>
                             <equals>
                                 <fun name="codeChv">
@@ -1334,26 +1334,26 @@
                                 <var name="codeCc"/>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <enum-value name="chv1"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="enabledChv1Status"/>
                                     <enum-value name="enabled"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <enum-value name="chv1"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <if-then-else>
                                 <equals>
@@ -1363,35 +1363,35 @@
                                     <int value="1"/>
                                 </equals>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <int value="0"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="blockedChvStatus">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <enum-value name="blocked"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="permissionSession">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <enum-value name="ltgFalse"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="enabledChv1Status"/>
                                         <enum-value name="enabled"/>
-                                    </assignment>
-                                    <assignment>
+                                    </var-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9840"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <enum-value name="chv1"/>
                                         </fun>
@@ -1401,11 +1401,11 @@
                                             </fun>
                                             <int value="1"/>
                                         </minus>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9804"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                             </if-then-else>
                         </if-then-else>
@@ -1434,19 +1434,19 @@
                         </fun>
                         <enum-value name="blocked"/>
                     </equals>
-                    <assignment>
+                    <var-assignment>
                         <var name="sw"/>
                         <enum-value name="sw9840"/>
-                    </assignment>
+                    </var-assignment>
                     <if-then-else>
                         <equals>
                             <var name="enabledChv1Status"/>
                             <enum-value name="disabled"/>
                         </equals>
-                        <assignment>
+                        <var-assignment>
                             <var name="sw"/>
                             <enum-value name="sw9808"/>
-                        </assignment>
+                        </var-assignment>
                         <if-then-else>
                             <equals>
                                 <var name="codeCc"/>
@@ -1455,26 +1455,26 @@
                                 </fun>
                             </equals>
                             <assignments>
-                                <assignment>
+                                <fun-assignment>
                                     <fun name="counterChv">
                                         <enum-value name="chv1"/>
                                     </fun>
                                     <const name="MaxChv"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="enabledChv1Status"/>
                                     <enum-value name="disabled"/>
-                                </assignment>
-                                <assignment>
+                                </var-assignment>
+                                <fun-assignment>
                                     <fun name="permissionSession">
                                         <enum-value name="chv1"/>
                                     </fun>
                                     <enum-value name="ltgTrue"/>
-                                </assignment>
-                                <assignment>
+                                </fun-assignment>
+                                <var-assignment>
                                     <var name="sw"/>
                                     <enum-value name="sw9000"/>
-                                </assignment>
+                                </var-assignment>
                             </assignments>
                             <if-then-else>
                                 <equals>
@@ -1484,35 +1484,35 @@
                                     <int value="1"/>
                                 </equals>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <int value="0"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="blockedChvStatus">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <enum-value name="blocked"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <fun-assignment>
                                         <fun name="permissionSession">
                                             <enum-value name="chv1"/>
                                         </fun>
                                         <enum-value name="ltgFalse"/>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="enabledChv1Status"/>
                                         <enum-value name="enabled"/>
-                                    </assignment>
-                                    <assignment>
+                                    </var-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9840"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                                 <assignments>
-                                    <assignment>
+                                    <fun-assignment>
                                         <fun name="counterChv">
                                             <enum-value name="chv1"/>
                                         </fun>
@@ -1522,15 +1522,15 @@
                                             </fun>
                                             <int value="1"/>
                                         </minus>
-                                    </assignment>
-                                    <assignment>
+                                    </fun-assignment>
+                                    <var-assignment>
                                         <var name="enabledChv1Status"/>
                                         <enum-value name="enabled"/>
-                                    </assignment>
-                                    <assignment>
+                                    </var-assignment>
+                                    <var-assignment>
                                         <var name="sw"/>
                                         <enum-value name="sw9804"/>
-                                    </assignment>
+                                    </var-assignment>
                                 </assignments>
                             </if-then-else>
                         </if-then-else>

@@ -1,8 +1,12 @@
 package lang.maths.defs;
 
 import lang.maths.exprs.arith.Int;
+import lang.maths.exprs.arith.Var;
 
 import java.util.LinkedHashMap;
+
+import static lang.maths.exprs.set.usuals.EUsualSet.Z;
+import static lang.maths.exprs.set.usuals.UsualSetFabric.getUsualSet;
 
 /**
  * Created by gvoiron on 18/11/17.
@@ -20,7 +24,11 @@ public final class DefsContext {
         this.funsDefs = new LinkedHashMap<>();
     }
 
-    public void addDef(String name, Int value) {
+    public void addFreshVar(Var var) {
+        addDef(new VarDef<>(var.getUnPrimedName(), getUsualSet(Z)));
+    }
+
+    public void addConstDef(String name, Int value) {
         if (constsDefs.containsKey(name)) {
             throw new Error("Error: const \"" + name + "\" was already defined in this scope.");
         }

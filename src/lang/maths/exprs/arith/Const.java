@@ -1,6 +1,7 @@
 package lang.maths.exprs.arith;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -24,6 +25,11 @@ public final class Const extends AValue {
     @Override
     public String accept(IObjectFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public Const accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
     public String getName() {

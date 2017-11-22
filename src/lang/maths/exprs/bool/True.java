@@ -1,6 +1,7 @@
 package lang.maths.exprs.bool;
 
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 /**
@@ -8,7 +9,6 @@ import visitors.formatters.interfaces.ISMTFormatter;
  * Time : 18:10
  */
 public final class True extends ALiteralBoolExpr {
-
 
     @Override
     public String accept(IObjectFormatter formatter) {
@@ -18,6 +18,11 @@ public final class True extends ALiteralBoolExpr {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public True accept(IPrimer primer) {
+        return primer.visit(this);
     }
 
 }

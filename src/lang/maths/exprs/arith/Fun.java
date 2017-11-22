@@ -3,6 +3,7 @@ package lang.maths.exprs.arith;
 import lang.AObject;
 import lang.maths.defs.DefsContext;
 import visitors.formatters.interfaces.IObjectFormatter;
+import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Arrays;
@@ -18,11 +19,15 @@ import java.util.stream.Stream;
  */
 public final class Fun extends AAssignable {
 
-    private final String name;
     private final AArithExpr parameter;
 
     public Fun(String name, AArithExpr parameter) {
-        this.name = name;
+        super(name);
+        this.parameter = parameter;
+    }
+
+    public Fun(String name, AArithExpr parameter, boolean isPrimed) {
+        super(name, isPrimed);
         this.parameter = parameter;
     }
 
@@ -37,17 +42,18 @@ public final class Fun extends AAssignable {
     }
 
     @Override
-    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
-        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(name).getDomain().getElements().stream().map(value -> new Var(name + "!" + value)).toArray(Var[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public Fun accept(IPrimer primer) {
+        return primer.visit(this);
+    }
+
+    @Override
+    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(value -> new FunVar(getRealName() + "!" + value)).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
     public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
         return new LinkedHashSet<>(Collections.singletonList(this));
-    }
-
-    public String getName() {
-        return name;
     }
 
     public AArithExpr getParameter() {
@@ -57,7 +63,7 @@ public final class Fun extends AAssignable {
     @Override
     public int compareTo(AObject object) {
         if (object instanceof Fun) {
-            int comparison = name.compareTo(((Fun) object).getName());
+            int comparison = getRealName().compareTo(((Fun) object).getUnPrimedName());
             if (comparison == 0) {
                 return parameter.compareTo(((Fun) object).getParameter());
             } else {

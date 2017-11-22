@@ -1,7 +1,9 @@
 package visitors.formatters;
 
 import lang.eventb.Event;
-import lang.eventb.substitutions.Skip;
+import lang.eventb.Machine;
+import lang.eventb.substitutions.*;
+import lang.maths.defs.ADef;
 import lang.maths.defs.FunDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
@@ -32,7 +34,7 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(Const aConst) {
-        return aConst.getName();
+        return aConst.getName() + "[" + aConst.getValue() + "]";
     }
 
     @Override
@@ -42,17 +44,22 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(EnumValue enumValue) {
-        return enumValue.getName();
+        return enumValue.getName() + "[" + enumValue.getValue() + "]";
     }
 
     @Override
     public String visit(Var var) {
-        return var.getName();
+        return var.getRealName();
+    }
+
+    @Override
+    public String visit(FunVar funVar) {
+        return funVar.getRealName();
     }
 
     @Override
     public String visit(Fun fun) {
-        return fun.getName() + "(" + fun.getParameter().accept(this) + ")";
+        return fun.getRealName() + "(" + fun.getParameter().accept(this) + ")";
     }
 
     @Override
@@ -67,17 +74,17 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(Times times) {
-        return times.getOperands().stream().map(operand -> operand instanceof Int || operand instanceof Var || operand instanceof Times ? operand.accept(this) : "(" + operand.accept(this) + ")").collect(Collectors.joining(" * "));
+        return times.getOperands().stream().map(operand -> operand instanceof Int || operand instanceof Const || operand instanceof Var || operand instanceof Times ? operand.accept(this) : "(" + operand.accept(this) + ")").collect(Collectors.joining(" * "));
     }
 
     @Override
     public String visit(Div div) {
-        return div.getOperands().stream().map(operand -> operand instanceof Int || operand instanceof Var || operand instanceof Div ? operand.accept(this) : "(" + operand.accept(this) + ")").collect(Collectors.joining(" / "));
+        return div.getOperands().stream().map(operand -> operand instanceof Int || operand instanceof Const || operand instanceof Var || operand instanceof Div ? operand.accept(this) : "(" + operand.accept(this) + ")").collect(Collectors.joining(" / "));
     }
 
     @Override
     public String visit(Mod mod) {
-        return mod.getOperands().stream().map(operand -> operand instanceof Int || operand instanceof Var || operand instanceof Mod ? operand.accept(this) : "(" + operand.accept(this) + ")").collect(Collectors.joining(" % "));
+        return "(" + mod.getLeft() + " % " + mod.getRight() + ")";
     }
 
     @Override
@@ -116,6 +123,11 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
+    public String visit(NotEquals notEquals) {
+        return notEquals.getLeft() + " ≠ " + notEquals.getRight();
+    }
+
+    @Override
     public String visit(LT lt) {
         return lt.getLeft() + " < " + lt.getRight();
     }
@@ -137,7 +149,7 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(InDomain inDomain) {
-        return inDomain.getExpr().accept(this) + " in " + inDomain.getSet().accept(this);
+        return inDomain.getExpr().accept(this) + " in " + inDomain.getDomain().accept(this);
     }
 
     @Override
@@ -147,12 +159,17 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(ForAll forAll) {
-        return null;
+        return "\\-/(" + forAll.getQuantifiedVarsDefs().stream().map(ADef::getName).collect(Collectors.joining(", ")) + ").(" + forAll.getExpr().accept(this) + ")";
     }
 
     @Override
     public String visit(Exists exists) {
-        return null;
+        return "E(" + exists.getQuantifiedVarsDefs().stream().map(ADef::getName).collect(Collectors.joining(", ")) + ").(" + exists.getExpr().accept(this) + ")";
+    }
+
+    @Override
+    public String visit(Invariant invariant) {
+        return invariant.getExpr().accept(this);
     }
 
     @Override
@@ -201,13 +218,56 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     }
 
     @Override
+    public String visit(Machine machine) {
+        String formatted = line("MACHINE \"" + machine.getName() + "\"");
+        formatted += machine.getConstsDefs().isEmpty() ? "" : line() + indentRight() + indentLine("CONSTS") + indentRight() + machine.getConstsDefs().keySet().stream().map(name -> indentLine(name + " = " + machine.getConstsDefs().get(name).accept(this) + "[" + machine.getDefsContext().getConstsDefs().get(name).getValue() + "]")).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        formatted += machine.getSetsDefs().isEmpty() ? "" : line() + indentRight() + indentLine("SETS") + indentRight() + machine.getSetsDefs().keySet().stream().map(name -> indentLine(name + " = " + machine.getSetsDefs().get(name))).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        formatted += machine.getDefsContext().getVarsDefs().isEmpty() ? "" : line() + indentRight() + indentLine("VARS") + indentRight() + machine.getDefsContext().getVarsDefs().keySet().stream().map(name -> indentLine(machine.getDefsContext().getVarsDefs().get(name).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        formatted += machine.getDefsContext().getFunsDefs().isEmpty() ? "" : line() + indentRight() + indentLine("FUNS") + indentRight() + machine.getDefsContext().getFunsDefs().keySet().stream().map(name -> indentLine(machine.getDefsContext().getFunsDefs().get(name).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        formatted += line() + indentRight() + indentLine("INVARIANT") + indentRight() + indentLine(machine.getInvariant().accept(this)) + indentLeft() + indentLeft();
+        formatted += line() + indentRight() + indentLine("INITIALISATION") + indentRight() + indentLine(machine.getInitialisation().accept(this)) + indentLeft() + indentLeft();
+        formatted += line() + indentRight() + indentLine("EVENTS") + line() + indentRight() + machine.getEvents().stream().map(event -> indentLine(event.accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        return formatted;
+    }
+
+    @Override
     public String visit(Event event) {
-        return null;
+        return line(event.getName() + " = ") + indentRight() + indentLine(event.getSubstitution().accept(this)) + indentLeft();
     }
 
     @Override
     public String visit(Skip skip) {
         return "SKIP";
+    }
+
+    @Override
+    public String visit(Assignments assignments) {
+        return assignments.getAssignments().stream().map(assignment -> assignment.accept(this)).collect(Collectors.joining("\n" + indent("")));
+    }
+
+    @Override
+    public String visit(VarAssignment varAssignment) {
+        return varAssignment.getAssignable().accept(this) + " := " + varAssignment.getValue().accept(this);
+    }
+
+    @Override
+    public String visit(FunAssignment funAssignment) {
+        return funAssignment.getAssignable().accept(this) + " := " + funAssignment.getValue().accept(this);
+    }
+
+    @Override
+    public String visit(Select select) {
+        return line("SELECT") + indentRight() + indentLine(select.getCondition().accept(this)) + indentLeft() + indentLine("THEN") + indentRight() + indentLine(select.getSubstitution().accept(this)) + indentLeft() + indent("END");
+    }
+
+    @Override
+    public String visit(Choice choice) {
+        return line("CHOICE") + indentRight() + choice.getSubstitutions().stream().map(substitution -> indentLine(substitution.accept(this))).collect(Collectors.joining(indentLeft() + indentLine("OR") + indentRight())) + indentLeft() + indent("END");
+    }
+
+    @Override
+    public String visit(Any any) {
+        return line("ANY") + indentRight() + any.getQuantifiedVarsDefs().stream().map(varDef -> indentLine(new InDomain(new Var(varDef.getName()), varDef.getDomain()).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLine("WHERE") + indentRight() + indentLine(any.getCondition().accept(this)) + indentLeft() + indentLine("THEN") + indentRight() + indentLine(any.getSubstitution().accept(this)) + indentLeft() + indent("END");
     }
 
 }

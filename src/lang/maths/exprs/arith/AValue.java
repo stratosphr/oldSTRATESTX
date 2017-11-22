@@ -1,6 +1,7 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
+import visitors.formatters.interfaces.IPrimer;
 
 import java.util.LinkedHashSet;
 
@@ -21,7 +22,10 @@ public abstract class AValue extends AArithExpr {
     }
 
     @Override
-    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+    public abstract AValue accept(IPrimer primer);
+
+    @Override
+    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return new LinkedHashSet<>();
     }
 
