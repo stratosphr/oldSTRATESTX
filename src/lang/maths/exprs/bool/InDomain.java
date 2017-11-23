@@ -3,6 +3,7 @@ package lang.maths.exprs.bool;
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.AVar;
+import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
@@ -19,12 +20,16 @@ public final class InDomain extends ABoolExpr {
 
     private final AArithExpr expr;
     private final ASetExpr domain;
-    private final ABoolExpr constraint;
 
     public InDomain(AArithExpr expr, ASetExpr domain) {
         this.expr = expr;
         this.domain = domain;
-        this.constraint = domain.getDomainConstraint(expr);
+    }
+
+    // TODO: CHECK WHAT HAPPENS IF WE TRY TO GET CONSTS WITH domain CONTAINING CONSTS AND IF IT FAILS, ADD CONSTS FROM domain. THIS ALSO NEEDS TO BE DONE WITH getVars AND getFuns
+    @Override
+    public LinkedHashSet<Const> getConsts() {
+        return expr.getConsts();
     }
 
     @Override
@@ -33,8 +38,8 @@ public final class InDomain extends ABoolExpr {
     }
 
     @Override
-    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return expr.getFuns(defsContext);
+    public LinkedHashSet<Fun> getFuns() {
+        return expr.getFuns();
     }
 
     public AArithExpr getExpr() {
@@ -46,7 +51,7 @@ public final class InDomain extends ABoolExpr {
     }
 
     public final ABoolExpr getConstraint() {
-        return constraint;
+        return domain.getDomainConstraint(expr);
     }
 
     @Override

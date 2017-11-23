@@ -2,6 +2,7 @@ package visitors.formatters;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.defs.FunDef;
+import lang.maths.defs.FunVarDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
@@ -54,7 +55,7 @@ public final class SMTFormatter extends GenericExprFormatter {
         }
         String formatted;
         if (expr instanceof AQuantifier) {
-            And funsConstraint = new And(expr.getFuns(defsContext).stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getUnPrimedName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
+            And funsConstraint = new And(expr.getFuns().stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getUnPrimedName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
             ABoolExpr quantifiedExpr;
             if (expr instanceof ForAll) {
                 quantifiedExpr = new Implies(funsConstraint, ((ForAll) expr).getExpr());
@@ -86,6 +87,11 @@ public final class SMTFormatter extends GenericExprFormatter {
     @Override
     public String visit(VarDef varDef) {
         return "(declare-fun " + varDef.getUnPrimedName() + " () Int)";
+    }
+
+    @Override
+    public String visit(FunVarDef funVarDef) {
+        return "(declare-fun " + funVarDef.getUnPrimedName() + " () Int)";
     }
 
     @Override

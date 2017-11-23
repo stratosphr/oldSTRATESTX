@@ -79,7 +79,7 @@ public final class EBMParser {
         node.assertConformsTo("const-def", 1, 1, "int", "const", "plus", "minus", "times", "div", "mod");
         AArithExpr expr = parseArithExpr(node.getChildren().get(0));
         DefsContext tmpDefsContext = new DefsContext();
-        if (!expr.getFuns(tmpDefsContext).isEmpty() || !expr.getVars(tmpDefsContext).isEmpty()) {
+        if (!expr.getFuns().isEmpty() || !expr.getVars(tmpDefsContext).isEmpty()) {
             throw new Error("Error l." + node.getChildren().get(0).getLine() + ",c." + node.getColumn() + ": the value of a const (here \"" + node.getAttributes().get("name") + "\") cannot depend on any variable or function.");
         }
         Var valueVar = new Var("value!");
@@ -98,8 +98,14 @@ public final class EBMParser {
         LinkedHashMap<String, ASetExpr> setsDefs = new LinkedHashMap<>();
         if (node != null) {
             node.assertConformsTo("sets-defs", 1, -1, "set-def");
+            node.getChildren().stream().map(this::parseSetDef).forEach(tuple -> setsDefs.put(tuple.getLeft(), tuple.getRight()));
         }
         return setsDefs;
+    }
+
+    private Tuple<String, ASetExpr> parseSetDef(XMLNode node) {
+        node.assertConformsTo("set-def", 1, 1, "usual", "named-set", "set", "enum", "range");
+        return new Tuple<>(node.getAttributes().get("name"), parseSetExpr(node.getChildren().get(0)));
     }
 
     private LinkedHashSet<VarDef> parseVarsDefs(XMLNode node) {
@@ -114,7 +120,7 @@ public final class EBMParser {
     private VarDef parseVarDef(XMLNode node) {
         node.assertConformsTo("var-def", 1, 1, "named-set", "set", "enum", "range", "usual");
         ASetExpr domain = parseSetExpr(node.getChildren().get(0));
-        if (domain.isEmpty()) {
+        if (domain.isEmpty(defsContext)) {
             throw new Error("Error l." + node.getLine() + ",c." + node.getColumn() + ": the domain of a variable (here \"" + node.getAttributes().get("name") + "\") cannot be empty (here " + domain + ").");
         }
         return new VarDef<>(new Var(node.getAttributes().get("name")), domain);
@@ -136,7 +142,7 @@ public final class EBMParser {
         }
         AFiniteSetExpr domain = parseFiniteSetExpr(node.getChildren().get(0));
         ASetExpr coDomain = parseSetExpr(node.getChildren().get(1));
-        if (domain.isEmpty()) {
+        if (domain.isEmpty(defsContext)) {
             throw new Error("Error l." + node.getLine() + ",c." + node.getColumn() + ": The domain of a variable (here \"" + node.getAttributes().get("name") + "\") cannot be empty (here " + domain + ").");
         }
         return new FunDef(node.getAttributes().get("name"), domain, coDomain);
@@ -246,7 +252,8 @@ public final class EBMParser {
     }
 
     private AArithExpr parseMod(XMLNode node) {
-        throw new Error("Unhandled case mod");
+        node.assertConformsTo("mod", 2, 2, "int", "const", "var", "fun", "plus", "minus", "times", "div", "mod");
+        return new Mod(parseArithExpr(node.getChildren().get(0)), parseArithExpr(node.getChildren().get(1)));
     }
 
     private ABoolExpr parseBoolExpr(XMLNode node) {

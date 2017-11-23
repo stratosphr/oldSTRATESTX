@@ -41,9 +41,10 @@ public final class Z3Result {
     }
 
     public Model getModel() {
-        return getModel(Stream.of(expr.getVars(defsContext), expr.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new)));
+        return getModel(Stream.of(expr.getVars(defsContext), expr.getFuns()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
+    // TODO: THIS METHOD DOES NOT TAKE THE assignables INTO ACCOUNT FOR THE MOMENT
     public Model getModel(LinkedHashSet<AAssignable> assignables) {
         if (!isSAT()) {
             throw new Error("Unable to generate a model for the following non satisfiable formula:\n" + expr);

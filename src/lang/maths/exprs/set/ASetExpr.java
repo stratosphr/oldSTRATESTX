@@ -1,6 +1,7 @@
 package lang.maths.exprs.set;
 
 import lang.AObject;
+import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.AValue;
 import lang.maths.exprs.arith.Int;
@@ -12,7 +13,7 @@ import lang.maths.exprs.bool.ABoolExpr;
  */
 public abstract class ASetExpr extends AObject {
 
-    public abstract boolean isEmpty();
+    public abstract boolean isEmpty(DefsContext defsContext);
 
     public abstract ABoolExpr getDomainConstraint(AArithExpr expr);
 

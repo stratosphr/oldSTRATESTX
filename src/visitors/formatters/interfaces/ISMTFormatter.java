@@ -1,6 +1,7 @@
 package visitors.formatters.interfaces;
 
 import lang.maths.defs.FunDef;
+import lang.maths.defs.FunVarDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
@@ -14,6 +15,8 @@ public interface ISMTFormatter {
     String visit(FunDef funDef);
 
     String visit(VarDef varDef);
+
+    String visit(FunVarDef funVarDef);
 
     String visit(Const aConst);
 

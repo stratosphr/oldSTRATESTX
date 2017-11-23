@@ -44,12 +44,17 @@ public final class FunVar extends AVar {
     }
 
     @Override
+    public LinkedHashSet<Const> getConsts() {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
     public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return new LinkedHashSet<>(Collections.singletonList(this));
     }
 
     @Override
-    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+    public LinkedHashSet<Fun> getFuns() {
         return new LinkedHashSet<>();
     }
 

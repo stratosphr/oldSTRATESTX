@@ -3,7 +3,7 @@ package solvers.z3;
 import com.microsoft.z3.*;
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.bool.ABoolExpr;
-import visitors.formatters.SMTFormatter;
+import visitors.formatters.SMTFormatter2;
 
 /**
  * Created by gvoiron on 17/11/17.
@@ -19,7 +19,7 @@ public final class Z3 {
 
     public static Z3Result checkSAT(ABoolExpr expr, DefsContext defsContext) {
         solver.reset();
-        String formattedExpr = expr.accept(new SMTFormatter(defsContext));
+        String formattedExpr = new SMTFormatter2(defsContext).format(expr);
         try {
             BoolExpr assertion = context.parseSMTLIB2String(formattedExpr, null, null, null, null);
             solver.add(assertion);

@@ -43,13 +43,18 @@ public final class ArithITE extends AArithExpr {
     }
 
     @Override
+    public LinkedHashSet<Const> getConsts() {
+        return Stream.of(condition.getConsts(), thenPart.getConsts(), elsePart.getConsts()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
     public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return Stream.of(condition.getVars(defsContext), thenPart.getVars(defsContext), elsePart.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return Stream.of(condition.getFuns(defsContext), thenPart.getFuns(defsContext), elsePart.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public LinkedHashSet<Fun> getFuns() {
+        return Stream.of(condition.getFuns(), thenPart.getFuns(), elsePart.getFuns()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public ABoolExpr getCondition() {

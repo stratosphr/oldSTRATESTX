@@ -3,6 +3,7 @@ package lang.maths.exprs.bool;
 import lang.maths.defs.DefsContext;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.AVar;
+import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
 import visitors.formatters.interfaces.IPrimer;
 
@@ -30,13 +31,18 @@ public abstract class AQuantifier extends ABoolExpr {
     public abstract AQuantifier accept(IPrimer primer);
 
     @Override
+    public LinkedHashSet<Const> getConsts() {
+        return expr.getConsts();
+    }
+
+    @Override
     public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return expr.getVars(defsContext);
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return expr.getFuns(defsContext);
+    public final LinkedHashSet<Fun> getFuns() {
+        return expr.getFuns();
     }
 
     public final ABoolExpr getExpr() {

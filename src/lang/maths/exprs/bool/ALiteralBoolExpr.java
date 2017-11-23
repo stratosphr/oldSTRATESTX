@@ -2,6 +2,7 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AVar;
+import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
 import visitors.formatters.interfaces.IPrimer;
 
@@ -17,12 +18,17 @@ public abstract class ALiteralBoolExpr extends ABoolExpr {
     public abstract ABoolExpr accept(IPrimer primer);
 
     @Override
+    public final LinkedHashSet<Const> getConsts() {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
     public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return new LinkedHashSet<>();
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+    public final LinkedHashSet<Fun> getFuns() {
         return new LinkedHashSet<>();
     }
 

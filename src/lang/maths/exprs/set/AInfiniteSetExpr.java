@@ -1,5 +1,6 @@
 package lang.maths.exprs.set;
 
+import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.arith.Int;
 import lang.maths.exprs.bool.*;
@@ -32,7 +33,7 @@ public abstract class AInfiniteSetExpr extends ASetExpr {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty(DefsContext defsContext) {
         return false;
     }
 

@@ -30,7 +30,7 @@ public abstract class AValue extends AArithExpr {
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+    public final LinkedHashSet<Fun> getFuns() {
         return new LinkedHashSet<>();
     }
 

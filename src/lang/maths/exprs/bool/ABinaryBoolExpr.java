@@ -3,6 +3,7 @@ package lang.maths.exprs.bool;
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.AGenericTypeExpr;
 import lang.maths.exprs.arith.AVar;
+import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
 import visitors.formatters.interfaces.IPrimer;
 
@@ -29,13 +30,18 @@ abstract class ABinaryBoolExpr<Operand extends AGenericTypeExpr<Operand>> extend
     public abstract ABinaryBoolExpr<Operand> accept(IPrimer primer);
 
     @Override
+    public final LinkedHashSet<Const> getConsts() {
+        return Stream.of(left.getConsts(), right.getConsts()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
     public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return Stream.of(left.getFuns(defsContext), right.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public final LinkedHashSet<Fun> getFuns() {
+        return Stream.of(left.getFuns(), right.getFuns()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public final Operand getLeft() {

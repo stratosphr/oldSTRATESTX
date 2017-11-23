@@ -6,6 +6,7 @@ import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * Created by gvoiron on 21/11/17.
@@ -38,6 +39,11 @@ public final class EnumValue extends AValue {
     @Override
     public EnumValue accept(IPrimer primer) {
         return primer.visit(this);
+    }
+
+    @Override
+    public LinkedHashSet<Const> getConsts() {
+        return new LinkedHashSet<>();
     }
 
     public String getName() {

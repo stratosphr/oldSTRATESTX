@@ -5,6 +5,8 @@ import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
+import java.util.LinkedHashSet;
+
 /**
  * Created by gvoiron on 16/11/17.
  * Time : 21:14
@@ -33,6 +35,11 @@ public final class Int extends AValue {
     @Override
     public int compareTo(AObject object) {
         return getValue().compareTo(((Int) object).getValue());
+    }
+
+    @Override
+    public LinkedHashSet<Const> getConsts() {
+        return new LinkedHashSet<>();
     }
 
 }

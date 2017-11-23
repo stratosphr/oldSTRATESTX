@@ -47,12 +47,17 @@ public final class Fun extends AAssignable {
     }
 
     @Override
-    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
-        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(element -> new FunVar(getUnPrimedName(), element.toString(), isPrimed())).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public LinkedHashSet<Const> getConsts() {
+        return parameter.getConsts();
     }
 
     @Override
-    public LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
+    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(element -> new Fun(getUnPrimedName(), element, isPrimed()).getFunVar()).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Fun> getFuns() {
         return new LinkedHashSet<>(Collections.singletonList(this));
     }
 
@@ -72,6 +77,10 @@ public final class Fun extends AAssignable {
         } else {
             return super.compareTo(object);
         }
+    }
+
+    private FunVar getFunVar() {
+        return new FunVar(getUnPrimedName(), parameter.toString(), isPrimed());
     }
 
 }

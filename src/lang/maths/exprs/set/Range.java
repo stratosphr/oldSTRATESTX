@@ -10,8 +10,10 @@ import solvers.z3.Z3Result;
 import utilities.Maths;
 import visitors.formatters.interfaces.IObjectFormatter;
 
+import java.util.Collection;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by gvoiron on 20/11/17.
@@ -39,6 +41,7 @@ public final class Range extends AFiniteSetExpr {
             Var lowerBoundVar = new Var("lowerBound");
             Var upperBoundVar = new Var("upperBound");
             DefsContext defsContext = new DefsContext();
+            Stream.of(lowerBound.getConsts(), upperBound.getConsts()).flatMap(Collection::stream).forEach(aConst -> defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue())));
             defsContext.addFreshVar(lowerBoundVar);
             defsContext.addFreshVar(upperBoundVar);
             Z3Result result = Z3.checkSAT(new And(new Equals(lowerBoundVar, lowerBound), new Equals(upperBoundVar, upperBound)), defsContext);
@@ -52,7 +55,7 @@ public final class Range extends AFiniteSetExpr {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty(DefsContext defsContext) {
         return false;
     }
 

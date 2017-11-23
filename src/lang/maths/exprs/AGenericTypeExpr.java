@@ -2,6 +2,7 @@ package lang.maths.exprs;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AVar;
+import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
 import visitors.formatters.Primer;
 import visitors.formatters.interfaces.ISMTFormattable;
@@ -19,8 +20,10 @@ public abstract class AGenericTypeExpr<Prime extends AGenericTypeExpr> extends A
         return accept(new Primer(true));
     }
 
+    public abstract LinkedHashSet<Const> getConsts();
+
     public abstract LinkedHashSet<AVar> getVars(DefsContext defsContext);
 
-    public abstract LinkedHashSet<Fun> getFuns(DefsContext defsContext);
+    public abstract LinkedHashSet<Fun> getFuns();
 
 }

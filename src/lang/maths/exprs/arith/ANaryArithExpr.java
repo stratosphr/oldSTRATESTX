@@ -33,13 +33,18 @@ abstract class ANaryArithExpr<Operand extends AGenericTypeExpr<Operand>> extends
     public abstract ANaryArithExpr<Operand> accept(IPrimer primer);
 
     @Override
+    public final LinkedHashSet<Const> getConsts() {
+        return operands.stream().map(AGenericTypeExpr::getConsts).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
     public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return operands.stream().map(operand -> operand.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public final LinkedHashSet<Fun> getFuns() {
+        return operands.stream().map(AGenericTypeExpr::getFuns).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

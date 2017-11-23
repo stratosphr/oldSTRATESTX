@@ -14,9 +14,6 @@ public abstract class ADef<Domain extends ASetExpr> extends AObject implements I
     final Domain domain;
 
     ADef(String unPrimedName, Domain domain) {
-        if (domain.isEmpty()) {
-            throw new Error("Error: the domain of \"" + unPrimedName + "\" cannot be empty.");
-        }
         this.unPrimedName = unPrimedName;
         this.domain = domain;
     }

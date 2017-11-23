@@ -16,6 +16,7 @@ public final class Skip extends ASubstitution {
         return formatter.visit(this);
     }
 
+    // TODO: THE ACTUAL Prd OF A SKIP SUBSTITUTION SHOULD ACTUALLY SET ALL PRIMED ASSIGNABLES TO THE VALUE OF THE ASSIGNABLE NON PRIMED
     @Override
     public ABoolExpr getPrd(DefsContext defsContext) {
         return new True();

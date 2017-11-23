@@ -9,6 +9,8 @@ import visitors.formatters.interfaces.IObjectFormatter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by gvoiron on 21/11/17.
@@ -21,8 +23,8 @@ public final class Enum extends AFiniteSetExpr {
 
     public Enum(EnumValue... enumValues) {
         this.enumValues = new TreeSet<>(Arrays.asList(enumValues));
-        this.enumValuesMapping = new LinkedHashMap<>();
-        Arrays.stream(enumValues).forEach(enumValue -> enumValuesMapping.put(new Int(enumValue.getValue()), enumValue));
+        this.enumValuesMapping = new LinkedHashMap<>(Arrays.stream(enumValues).collect(Collectors.toMap(enumValue -> new Int(enumValue.getValue()), Function.identity())));
+        //Arrays.stream(enumValues).forEach(enumValue -> enumValuesMapping.put(new Int(enumValue.getValue()), enumValue));
     }
 
     @Override

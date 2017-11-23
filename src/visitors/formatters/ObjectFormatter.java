@@ -5,6 +5,7 @@ import lang.eventb.Machine;
 import lang.eventb.substitutions.*;
 import lang.maths.defs.ADef;
 import lang.maths.defs.FunDef;
+import lang.maths.defs.FunVarDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
@@ -25,6 +26,11 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
     @Override
     public String visit(VarDef varDef) {
         return varDef.getUnPrimedName() + " in " + varDef.getDomain().accept(this);
+    }
+
+    @Override
+    public String visit(FunVarDef funVarDef) {
+        return funVarDef.getUnPrimedName() + " in " + funVarDef.getDomain().accept(this);
     }
 
     @Override
@@ -226,7 +232,7 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
         formatted += machine.getDefsContext().getFunsDefs().isEmpty() ? "" : line() + indentRight() + indentLine("FUNS") + indentRight() + machine.getDefsContext().getFunsDefs().keySet().stream().map(name -> indentLine(machine.getDefsContext().getFunsDefs().get(name).accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
         formatted += line() + indentRight() + indentLine("INVARIANT") + indentRight() + indentLine(machine.getInvariant().accept(this)) + indentLeft() + indentLeft();
         formatted += line() + indentRight() + indentLine("INITIALISATION") + indentRight() + indentLine(machine.getInitialisation().accept(this)) + indentLeft() + indentLeft();
-        formatted += line() + indentRight() + indentLine("EVENTS") + line() + indentRight() + machine.getEvents().stream().map(event -> indentLine(event.accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
+        formatted += line() + indentRight() + indentLine("EVENTS") + line() + indentRight() + machine.getEvents().values().stream().map(event -> indentLine(event.accept(this))).collect(Collectors.joining()) + indentLeft() + indentLeft();
         return formatted;
     }
 

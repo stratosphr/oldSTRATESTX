@@ -1,5 +1,6 @@
 package lang.maths.exprs.set;
 
+import lang.maths.defs.DefsContext;
 import lang.maths.exprs.arith.AArithExpr;
 import lang.maths.exprs.bool.ABoolExpr;
 import lang.maths.exprs.bool.Equals;
@@ -25,7 +26,7 @@ public abstract class AFiniteSetExpr extends ASetExpr {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty(DefsContext defsContext) {
         return getElements().isEmpty();
     }
 

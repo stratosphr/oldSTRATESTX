@@ -27,13 +27,18 @@ abstract class ABinaryArithExpr<Operand extends AGenericTypeExpr<Operand>> exten
     public abstract ABinaryArithExpr<Operand> accept(IPrimer primer);
 
     @Override
+    public final LinkedHashSet<Const> getConsts() {
+        return Stream.of(left.getConsts(), right.getConsts()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
     public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public final LinkedHashSet<Fun> getFuns(DefsContext defsContext) {
-        return Stream.of(left.getFuns(defsContext), right.getFuns(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public final LinkedHashSet<Fun> getFuns() {
+        return Stream.of(left.getFuns(), right.getFuns()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public Operand getLeft() {

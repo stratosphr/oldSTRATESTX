@@ -10,6 +10,7 @@ import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by gvoiron on 20/11/17.
@@ -23,7 +24,7 @@ public final class Machine extends AObject {
     private final DefsContext defsContext;
     private final ABoolExpr invariant;
     private final ASubstitution initialisation;
-    private final LinkedHashSet<Event> events;
+    private final LinkedHashMap<String, Event> events;
 
     public Machine(String name, LinkedHashMap<String, AArithExpr> constsDefs, LinkedHashMap<String, ASetExpr> setsDefs, DefsContext defsContext, ABoolExpr invariant, ASubstitution initialisation, LinkedHashSet<Event> events) {
         this.name = name;
@@ -32,7 +33,7 @@ public final class Machine extends AObject {
         this.defsContext = defsContext;
         this.invariant = invariant;
         this.initialisation = initialisation;
-        this.events = events;
+        this.events = new LinkedHashMap<>(events.stream().collect(Collectors.toMap(Event::getName, event -> event)));
     }
 
     @Override
@@ -64,7 +65,7 @@ public final class Machine extends AObject {
         return initialisation;
     }
 
-    public LinkedHashSet<Event> getEvents() {
+    public LinkedHashMap<String, Event> getEvents() {
         return events;
     }
 
