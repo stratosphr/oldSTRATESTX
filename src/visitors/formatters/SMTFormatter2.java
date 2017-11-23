@@ -19,7 +19,6 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
 
     private final DefsContext defsContext;
     private final int foldingLimit;
-    private boolean isVisitingBoolExpr;
 
     public SMTFormatter2(DefsContext defsContext) {
         this(defsContext, 80);
@@ -28,7 +27,6 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
     public SMTFormatter2(DefsContext defsContext, int foldingLimit) {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
-        this.isVisitingBoolExpr = false;
     }
 
     public String format(ABoolExpr expr) {
