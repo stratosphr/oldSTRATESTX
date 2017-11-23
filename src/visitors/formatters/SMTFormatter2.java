@@ -22,7 +22,7 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
     private boolean isVisitingBoolExpr;
 
     public SMTFormatter2(DefsContext defsContext) {
-        this(defsContext, 0);
+        this(defsContext, 80);
     }
 
     public SMTFormatter2(DefsContext defsContext, int foldingLimit) {
@@ -34,7 +34,7 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
     public String format(ABoolExpr expr) {
         String formatted = defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name) + ")")).collect(Collectors.joining());
         formatted += defsContext.getVarsDefs().values().stream().map(varDef -> line(varDef.accept(this))).collect(Collectors.joining());
-        formatted += "(assert " + expr.accept(this) + ")";
+        formatted += "(assert " + fold(expr.accept(this)) + ")";
         System.err.println(formatted);
         System.err.println("###############################################");
         return formatted;
@@ -56,45 +56,42 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(VarDef varDef) {
-        return "(declare-fun " + varDef.getUnPrimedName() + " () Int)";
+        return fold("(declare-fun " + varDef.getUnPrimedName() + " () Int)");
     }
 
     @Override
     public String visit(FunVarDef funVarDef) {
-        return "(declare-fun " + funVarDef.getUnPrimedName() + " () Int)";
+        return fold("(declare-fun " + funVarDef.getUnPrimedName() + " () Int)");
     }
 
     @Override
     public String visit(Const aConst) {
-        return aConst.getName();
+        return fold(aConst.getName());
     }
 
     @Override
     public String visit(Int anInt) {
-        return anInt.getValue().toString();
+        return fold(anInt.getValue().toString());
     }
 
     @Override
     public String visit(EnumValue enumValue) {
-        System.exit(46);
-        return null;
+        return fold(new Int(enumValue.getValue()).accept(this));
     }
 
     @Override
     public String visit(Var var) {
-        return var.getRealName();
+        return fold(var.getRealName());
     }
 
     @Override
     public String visit(FunVar funVar) {
-        System.exit(48);
-        return null;
+        return fold(funVar.getRealName());
     }
 
     @Override
     public String visit(Fun fun) {
-        System.exit(49);
-        return null;
+        return fold("(" + fun.getRealName() + " " + fun.getParameter().accept(this) + ")");
     }
 
     @Override
@@ -153,13 +150,12 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Or or) {
-        System.exit(59);
-        return null;
+        return fold(or.getOperands().isEmpty() ? new False().accept(this) : line("(or") + indentRight() + or.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(And and) {
-        return fold(line("(and") + indentRight() + and.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft()) + indent(")");
+        return fold(and.getOperands().isEmpty() ? new True().accept(this) : line("(and") + indentRight() + and.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")"));
     }
 
     @Override
@@ -199,8 +195,7 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(InDomain inDomain) {
-        System.exit(67);
-        return null;
+        return fold(inDomain.getConstraint().accept(this));
     }
 
     @Override
@@ -223,8 +218,7 @@ public class SMTFormatter2 extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Invariant invariant) {
-        System.exit(71);
-        return null;
+        return fold(invariant.getExpr().accept(this));
     }
 
 }

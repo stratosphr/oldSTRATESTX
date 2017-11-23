@@ -110,17 +110,17 @@ public final class ObjectFormatter extends AFormatter implements IObjectFormatte
 
     @Override
     public String visit(Not not) {
-        return "not(" + not.getOperand();
+        return "not(" + not.getOperand() + ")";
     }
 
     @Override
     public String visit(Or or) {
-        return "or(" + or.getOperands().stream().map(operand -> operand.accept(this)).collect(Collectors.joining(", ")) + ")";
+        return "or(" + or.getOperands().stream().map(operand -> operand instanceof Or ? ((Or) operand).getOperands().stream().map(subOperand -> subOperand.accept(this)).collect(Collectors.joining(", ")) : operand.accept(this)).collect(Collectors.joining(", ")) + ")";
     }
 
     @Override
     public String visit(And and) {
-        return "and(" + and.getOperands().stream().map(operand -> operand.accept(this)).collect(Collectors.joining(", ")) + ")";
+        return "and(" + and.getOperands().stream().map(operand -> operand instanceof And ? ((And) operand).getOperands().stream().map(subOperand -> subOperand.accept(this)).collect(Collectors.joining(", ")) : operand.accept(this)).collect(Collectors.joining(", ")) + ")";
     }
 
     @Override

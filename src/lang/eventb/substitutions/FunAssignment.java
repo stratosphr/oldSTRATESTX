@@ -30,18 +30,14 @@ public class FunAssignment extends AAssignment<Fun> {
 
     @Override
     public ABoolExpr getPrd(DefsContext defsContext) {
-        System.out.println(defsContext.getConstsDefs());
-        System.out.println(defsContext.getVarsDefs().keySet());
-        System.out.println(defsContext.getFunVarsDefs().keySet());
-        System.out.println(defsContext.getFunsDefs().keySet());
-        ABoolExpr prd = new And(
+        return new And(
                 Stream.of(
                         Arrays.asList(
-                                new Equals(assignable.prime(), value),
+                                getPrdInAssignments(defsContext),
                                 new ForAll(
                                         new Implies(
                                                 new NotEquals(new Var("i!"), assignable.getParameter()),
-                                                new Equals(new Fun(assignable.getUnPrimedName(), assignable.getParameter()), new Fun(assignable.getUnPrimedName(), assignable.getParameter()).prime())
+                                                new Equals(new Fun(assignable.getUnPrimedName(), assignable.getParameter()).prime(), new Fun(assignable.getUnPrimedName(), assignable.getParameter()))
                                         ),
                                         new VarDef<>(new Var("i!"), defsContext.getFunsDefs().get(assignable.getUnPrimedName()).getDomain())
                                 )
@@ -50,14 +46,15 @@ public class FunAssignment extends AAssignment<Fun> {
                         defsContext.getFunVarsDefs().values().stream().filter(funVarDef -> !funVarDef.getVar().getFunName().equals(assignable.getUnPrimedName())).map(funVarDef -> new Equals(funVarDef.getVar().prime(), funVarDef.getVar())).collect(Collectors.toList())
                 ).flatMap(Collection::stream).toArray(ABoolExpr[]::new)
         );
-        System.out.println(prd);
-        System.exit(42);
-        return null;
     }
 
     @Override
     public ABoolExpr getPrdInAssignments(DefsContext defsContext) {
-        return new Equals(assignable.prime(), value);
+        return new And(
+                new InDomain(getAssignable().getParameter(), defsContext.getFunsDefs().get(assignable.getUnPrimedName()).getDomain()),
+                new InDomain(value, defsContext.getFunsDefs().get(assignable.getUnPrimedName()).getCoDomain()),
+                new Equals(assignable.prime(), value)
+        );
     }
 
 }

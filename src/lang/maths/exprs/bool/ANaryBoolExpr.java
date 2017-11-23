@@ -22,9 +22,6 @@ public abstract class ANaryBoolExpr<Operand extends AGenericTypeExpr<Operand>> e
     private final List<Operand> operands;
 
     ANaryBoolExpr(Operand[] operands) {
-        if (operands.length < 1) {
-            throw new Error("The minimum number of operands expected to instantiate a \"" + getClass().getSimpleName() + "\" object is 1 (only " + operands.length + " were given)");
-        }
         this.operands = Arrays.asList(operands);
     }
 
