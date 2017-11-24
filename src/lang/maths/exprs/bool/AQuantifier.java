@@ -10,6 +10,7 @@ import visitors.formatters.interfaces.IPrimer;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by gvoiron on 20/11/17.
@@ -38,7 +39,7 @@ public abstract class AQuantifier extends ABoolExpr {
 
     @Override
     public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
-        return expr.getVars(defsContext);
+        return expr.getVars(defsContext).stream().filter(var -> varDefs.stream().noneMatch(varDef -> varDef.getVar().equals(var))).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

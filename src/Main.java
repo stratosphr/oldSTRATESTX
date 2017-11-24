@@ -10,7 +10,6 @@ import parsers.ebm.EBMParser;
 import solvers.z3.Z3;
 import solvers.z3.Z3Result;
 import utilities.ResourcesManager;
-import visitors.formatters.SMTFormatter;
 
 import static utilities.ResourcesManager.EModel.EXAMPLE;
 
@@ -25,10 +24,10 @@ class Main {
                     machine.getInvariant().prime(),
                     new And(new Equals(new Var("sw"), new Int(1))),
                     new And(new Equals(new Fun("bat", new Int(1)), new EnumValue("ok"))),
-                    machine.getEvents().get("Tic").getSubstitution().getPrd(machine.getDefsContext())
+                    new And(new Equals(new Fun("bat", new Int(2)), new EnumValue("ok"))),
+                    new And(new Equals(new Fun("bat", new Int(3)), new EnumValue("ok"))),
+                    machine.getEvents().get("Commute").getSubstitution().getPrd(machine.getDefsContext())
             );
-            System.out.println(constraint);
-            System.out.println(constraint.accept(new SMTFormatter(machine.getDefsContext())));
             Z3Result result = Z3.checkSAT(constraint, machine.getDefsContext());
             if (result.isSAT()) {
                 System.out.println(result.getModel());

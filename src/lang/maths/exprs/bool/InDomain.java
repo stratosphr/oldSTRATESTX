@@ -7,7 +7,10 @@ import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by gvoiron on 19/11/17.
@@ -23,39 +26,6 @@ public final class InDomain extends ABoolExpr {
         this.domain = domain;
     }
 
-    // TODO: CHECK WHAT HAPPENS IF WE TRY TO GET CONSTS WITH domain CONTAINING CONSTS AND IF IT FAILS, ADD CONSTS FROM domain. THIS ALSO NEEDS TO BE DONE WITH getVars AND getFuns
-    @Override
-    public LinkedHashSet<Const> getConsts() {
-        return expr.getConsts();
-    }
-
-    @Override
-    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
-        return expr.getVars(defsContext);
-    }
-
-    @Override
-    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
-        return expr.getFunVars(defsContext);
-    }
-
-    @Override
-    public LinkedHashSet<Fun> getFuns() {
-        return expr.getFuns();
-    }
-
-    public AArithExpr getExpr() {
-        return expr;
-    }
-
-    public ASetExpr getDomain() {
-        return domain;
-    }
-
-    public final ABoolExpr getConstraint() {
-        return domain.getDomainConstraint(expr);
-    }
-
     @Override
     public InDomain accept(IPrimer primer) {
         return primer.visit(this);
@@ -69,6 +39,38 @@ public final class InDomain extends ABoolExpr {
     @Override
     public String accept(ISMTFormatter formatter) {
         return formatter.visit(this);
+    }
+
+    @Override
+    public LinkedHashSet<Const> getConsts() {
+        return Stream.of(expr.getConsts(), domain.getConsts()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return Stream.of(expr.getVars(defsContext), domain.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(expr.getFunVars(defsContext), domain.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Fun> getFuns() {
+        return Stream.of(expr.getFuns(), domain.getFuns()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public AArithExpr getExpr() {
+        return expr;
+    }
+
+    public ASetExpr getDomain() {
+        return domain;
+    }
+
+    public final ABoolExpr getConstraint() {
+        return domain.getDomainConstraint(expr);
     }
 
 }

@@ -18,9 +18,9 @@ public interface ISMTFormatter {
 
     String visit(FunDef funDef);
 
-    String visit(Const aConst);
-
     String visit(Int anInt);
+
+    String visit(Const aConst);
 
     String visit(EnumValue enumValue);
 

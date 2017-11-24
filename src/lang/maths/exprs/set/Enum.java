@@ -39,7 +39,7 @@ public final class Enum extends AFiniteSetExpr {
 
     @Override
     public AValue retrieveValue(Int value) {
-        if (enumValuesMapping.containsKey(value)) {
+        if (enumValuesMapping.containsKey(value) && enumValues.contains(enumValuesMapping.get(value))) {
             return enumValuesMapping.get(value);
         } else {
             throw new Error("Error: enum value \"" + value + "\" is not a valid enum value in set " + this + ".");

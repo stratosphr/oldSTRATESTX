@@ -1,9 +1,8 @@
 package lang.maths.exprs.set;
 
 import lang.maths.defs.DefsContext;
-import lang.maths.exprs.arith.AArithExpr;
-import lang.maths.exprs.arith.Int;
-import lang.maths.exprs.arith.Var;
+import lang.maths.exprs.AExpr;
+import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
 import solvers.z3.Z3;
 import solvers.z3.Z3Result;
@@ -11,6 +10,7 @@ import utilities.Maths;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,12 +36,32 @@ public final class Range extends AFiniteSetExpr {
     }
 
     @Override
+    public LinkedHashSet<Const> getConsts() {
+        return Stream.of(lowerBound.getConsts(), upperBound.getConsts()).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return Stream.of(lowerBound.getVars(defsContext), upperBound.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(lowerBound.getFunVars(defsContext), upperBound.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<Fun> getFuns() {
+        return getElements().stream().map(AExpr::getFuns).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
     public TreeSet<AArithExpr> getElements() {
         if (elements == null) {
             Var lowerBoundVar = new Var("lowerBound");
             Var upperBoundVar = new Var("upperBound");
             DefsContext defsContext = new DefsContext();
-            Stream.of(lowerBound.getConsts(), upperBound.getConsts()).flatMap(Collection::stream).forEach(aConst -> defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue())));
+            //Stream.of(lowerBound.getConsts(), upperBound.getConsts()).flatMap(Collection::stream).forEach(aConst -> defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue())));
             defsContext.addFreshVar(lowerBoundVar);
             defsContext.addFreshVar(upperBoundVar);
             Z3Result result = Z3.checkSAT(new And(new Equals(lowerBoundVar, lowerBound), new Equals(upperBoundVar, upperBound)), defsContext);

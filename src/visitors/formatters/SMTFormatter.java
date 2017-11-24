@@ -9,6 +9,7 @@ import lang.maths.exprs.bool.*;
 import visitors.formatters.interfaces.ISMTFormatter;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -19,7 +20,9 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     private final DefsContext defsContext;
     private final int foldingLimit;
+    private LinkedHashSet<Var> quantifiedVars;
 
+    // TODO: ADD VARS AND FUNS CONSTRAINTS ASSERTIONS
     public SMTFormatter(DefsContext defsContext) {
         this(defsContext, 80);
     }
@@ -27,18 +30,19 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
     public SMTFormatter(DefsContext defsContext, int foldingLimit) {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
+        this.quantifiedVars = new LinkedHashSet<>();
     }
 
     public String format(ABoolExpr expr) {
+        String tmpformatted = "(assert " + expr.accept(this) + ")";
         String formatted = "";
-        formatted += defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name) + ")")).collect(Collectors.joining());
-        formatted += defsContext.getVarsDefs().values().stream().map(varDef -> line(varDef.accept(this))).collect(Collectors.joining());
-        formatted += defsContext.getVarsDefs().values().stream().map(varDef -> line(new VarDef<>(varDef.getVar().accept(new Primer(true)), varDef.getDomain()).accept(this))).collect(Collectors.joining());
+        formatted += expr.getConsts().stream().map(aConst -> line("(define-fun " + aConst.getName() + " () Int " + aConst.getValue() + ")")).collect(Collectors.joining());
+        formatted += expr.getVars(defsContext).stream().map(var -> line(defsContext.getVarDef(var.getName()).accept(this))).collect(Collectors.joining());
         formatted += defsContext.getFunVarsDefs().values().stream().map(funVarDef -> line(funVarDef.accept(this))).collect(Collectors.joining());
-        formatted += defsContext.getFunVarsDefs().values().stream().map(funVarDef -> line(new FunVarDef<>(funVarDef.getVar().accept(new Primer(true)), funVarDef.getDomain()).accept(this))).collect(Collectors.joining());
         formatted += defsContext.getFunsDefs().values().stream().map(funDef -> line(funDef.accept(this))).collect(Collectors.joining());
-        formatted += defsContext.getFunsDefs().values().stream().map(funDef -> line(new FunDef(new Var(funDef.getName()).accept(new Primer(true)).getName(), funDef.getDomain(), funDef.getCoDomain()).accept(this))).collect(Collectors.joining());
-        formatted += "(assert " + expr.accept(this) + ")";
+        formatted += tmpformatted;
+        System.out.println(formatted);
+        System.out.println("################################");
         return formatted;
     }
 
@@ -63,6 +67,7 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
     @Override
     public String visit(FunDef funDef) {
         Var index = new Var("i!");
+        defsContext.addFreshVar(index);
         String formatted = line("(define-fun " + funDef.getName() + " ((" + index.accept(this) + " Int)) Int");
         formatted += indentRight() + indentLine(funDef.getDomain().getElements().descendingSet().stream().filter(o -> !o.equals(funDef.getDomain().getElements().last())).reduce(new ArithITE(new Equals(index, funDef.getDomain().getElements().last()), new FunVar(new Fun(funDef.getName(), funDef.getDomain().getElements().last())), funDef.getDomain().getElements().first()), (element1, o2) -> new ArithITE(new Equals(index, o2), new FunVar(new Fun(funDef.getName(), o2)), element1), (arithITE1, arithITE2) -> arithITE1).accept(this)) + indentLeft();
         formatted += indent(")");
@@ -70,13 +75,16 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
     }
 
     @Override
-    public String visit(Const aConst) {
-        return fold(aConst.getName());
+    public String visit(Int anInt) {
+        return fold(anInt.getValue().toString());
     }
 
     @Override
-    public String visit(Int anInt) {
-        return fold(anInt.getValue().toString());
+    public String visit(Const aConst) {
+        if (!defsContext.getConstsDefs().containsKey(aConst.getName())) {
+            defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue()));
+        }
+        return fold(aConst.getName());
     }
 
     @Override
@@ -86,6 +94,14 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Var var) {
+        Var unprimed = var.accept(new Primer(false));
+        if (!defsContext.getVarsDefs().containsKey(var.getName()) && !quantifiedVars.contains(var)) {
+            if (defsContext.getVarsDefs().containsKey(unprimed.getName())) {
+                defsContext.addDef(new VarDef<>(var, defsContext.getVarDef(unprimed.getName()).getDomain()));
+            } else {
+                throw new Error("Error: Variable \"" + unprimed + "\" must be defined in order to be able to format variable \"" + var + "\".");
+            }
+        }
         return fold(var.getName());
     }
 
@@ -96,6 +112,14 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Fun fun) {
+        Fun unprimed = fun.accept(new Primer(false));
+        if (!defsContext.getFunsDefs().containsKey(fun.getName())) {
+            if (defsContext.getFunsDefs().containsKey(unprimed.getName())) {
+                defsContext.addDef(new FunDef(fun.getName(), defsContext.getFunDef(unprimed.getName()).getDomain(), defsContext.getFunDef(unprimed.getName()).getCoDomain()));
+            } else {
+                throw new Error("Error: Function \"" + unprimed + "\" must be defined in order to be able to format function \"" + fun + "\".");
+            }
+        }
         return fold("(" + fun.getName() + " " + fun.getParameter().accept(this) + ")");
     }
 
@@ -148,8 +172,7 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Not not) {
-        System.exit(58);
-        return null;
+        return fold(line("(not") + indentRight() + indentLine(not.getOperand().accept(this)) + indentLeft() + indent(")"));
     }
 
     @Override
@@ -169,8 +192,7 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(NotEquals notEquals) {
-        System.exit(62);
-        return null;
+        return new Not(new Equals(notEquals.getLeft(), notEquals.getRight())).accept(this);
     }
 
     @Override
@@ -181,14 +203,12 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(LEQ leq) {
-        System.exit(64);
-        return null;
+        return fold(line("(<=") + indentRight() + indentLine(leq.getLeft().accept(this)) + indentLine(leq.getRight().accept(this)) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(GEQ geq) {
-        System.exit(65);
-        return null;
+        return fold(line("(>=") + indentRight() + indentLine(geq.getLeft().accept(this)) + indentLine(geq.getRight().accept(this)) + indentLeft() + indent(")"));
     }
 
     @Override
@@ -204,20 +224,25 @@ public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     @Override
     public String visit(Implies implies) {
-        System.exit(68);
-        return null;
+        return fold(line("(=>") + indentRight() + indentLine(implies.getCondition().accept(this)) + indentLine(implies.getThenPart().accept(this)) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(ForAll forAll) {
-        System.exit(69);
-        return null;
+        LinkedHashSet<Var> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
+        quantifiedVars.addAll(forAll.getQuantifiedVarsDefs().stream().map(VarDef::getVar).collect(Collectors.toList()));
+        String formatted = fold(line("(forall") + indentRight() + indentLine("(" + forAll.getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(forAll.getExpr().accept(this)) + indentLeft() + indent(")"));
+        quantifiedVars = oldQuantifiedVars;
+        return formatted;
     }
 
     @Override
     public String visit(Exists exists) {
-        System.exit(70);
-        return null;
+        LinkedHashSet<Var> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
+        quantifiedVars.addAll(exists.getQuantifiedVarsDefs().stream().map(VarDef::getVar).collect(Collectors.toList()));
+        String formatted = fold(line("(exists") + indentRight() + indentLine("(" + exists.getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(exists.getExpr().accept(this)) + indentLeft() + indent(")"));
+        quantifiedVars = oldQuantifiedVars;
+        return formatted;
     }
 
     @Override

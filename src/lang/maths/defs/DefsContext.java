@@ -72,6 +72,38 @@ public final class DefsContext {
         funsDefs.put(funDef.getName(), funDef);
     }
 
+    public Int getConstDef(String name) {
+        if (constsDefs.containsKey(name)) {
+            return constsDefs.get(name);
+        } else {
+            throw new Error("Error: Constant \"" + name + "\" was not declared in this scope.");
+        }
+    }
+
+    public VarDef getVarDef(String name) {
+        if (varsDefs.containsKey(name)) {
+            return varsDefs.get(name);
+        } else {
+            throw new Error("Error: Variable \"" + name + "\" was not declared in this scope.");
+        }
+    }
+
+    public FunVarDef getFunVarDef(String name) {
+        if (funVarsDefs.containsKey(name)) {
+            return funVarsDefs.get(name);
+        } else {
+            throw new Error("Error: Function variable \"" + name + "\" was not declared in this scope.");
+        }
+    }
+
+    public FunDef getFunDef(String name) {
+        if (funsDefs.containsKey(name)) {
+            return funsDefs.get(name);
+        } else {
+            throw new Error("Error: Function \"" + name + "\" was not declared in this scope.");
+        }
+    }
+
     public LinkedHashMap<String, Int> getConstsDefs() {
         return constsDefs;
     }

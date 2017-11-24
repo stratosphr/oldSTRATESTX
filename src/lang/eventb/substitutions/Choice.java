@@ -2,6 +2,7 @@ package lang.eventb.substitutions;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.bool.ABoolExpr;
+import lang.maths.exprs.bool.Or;
 import visitors.formatters.interfaces.IObjectFormatter;
 
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public final class Choice extends ASubstitution {
 
     @Override
     public ABoolExpr getPrd(DefsContext defsContext) {
-        return null;
+        return new Or(substitutions.stream().map(substitution -> substitution.getPrd(defsContext)).toArray(ABoolExpr[]::new));
     }
 
     public LinkedHashSet<ASubstitution> getSubstitutions() {

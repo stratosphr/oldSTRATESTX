@@ -37,7 +37,7 @@ public class FunAssignment extends AAssignment<Fun> {
                                 new ForAll(
                                         new Implies(
                                                 new NotEquals(new Var("i!"), assignable.getParameter()),
-                                                new Equals(new Fun(assignable.getName(), assignable.getParameter()).prime(), new Fun(assignable.getName(), assignable.getParameter()))
+                                                new Equals(new Fun(assignable.getName(), new Var("i!")).prime(), new Fun(assignable.getName(), new Var("i!")))
                                         ),
                                         new VarDef<>(new Var("i!"), defsContext.getFunsDefs().get(assignable.getName()).getDomain())
                                 )
