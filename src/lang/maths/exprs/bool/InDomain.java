@@ -1,10 +1,7 @@
 package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
-import lang.maths.exprs.arith.AArithExpr;
-import lang.maths.exprs.arith.AVar;
-import lang.maths.exprs.arith.Const;
-import lang.maths.exprs.arith.Fun;
+import lang.maths.exprs.arith.*;
 import lang.maths.exprs.set.ASetExpr;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
@@ -33,8 +30,13 @@ public final class InDomain extends ABoolExpr {
     }
 
     @Override
-    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return expr.getVars(defsContext);
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return expr.getFunVars(defsContext);
     }
 
     @Override

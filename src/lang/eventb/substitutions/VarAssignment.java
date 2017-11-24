@@ -43,7 +43,7 @@ public final class VarAssignment extends AAssignment<Var> {
     @Override
     ABoolExpr getPrdInAssignments(DefsContext defsContext) {
         return new And(
-                new InDomain(value, defsContext.getVarsDefs().get(assignable.getUnPrimedName()).getDomain()), new Equals(assignable.prime(), value)
+                new InDomain(value, defsContext.getVarsDefs().get(assignable.getName()).getDomain()), new Equals(assignable.prime(), value)
         );
     }
 

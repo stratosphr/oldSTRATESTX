@@ -8,12 +8,8 @@ import visitors.formatters.interfaces.IPrimer;
  */
 public abstract class AVar extends AAssignable {
 
-    AVar(String unPrimedName, String primedName) {
-        this(unPrimedName, primedName, false);
-    }
-
-    AVar(String unPrimedName, String primedName, boolean isPrimed) {
-        super(unPrimedName, primedName, isPrimed);
+    AVar(String name) {
+        super(name);
     }
 
     @Override

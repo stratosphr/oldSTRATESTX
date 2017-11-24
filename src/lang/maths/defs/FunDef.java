@@ -13,8 +13,8 @@ public final class FunDef extends ADef<AFiniteSetExpr> {
 
     private final ASetExpr coDomain;
 
-    public FunDef(String realName, AFiniteSetExpr domain, ASetExpr coDomain) {
-        super(realName, domain);
+    public FunDef(String name, AFiniteSetExpr domain, ASetExpr coDomain) {
+        super(name, domain);
         this.coDomain = coDomain;
     }
 

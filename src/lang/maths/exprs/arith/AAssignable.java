@@ -8,39 +8,17 @@ import visitors.formatters.interfaces.IPrimer;
  */
 public abstract class AAssignable extends AArithExpr {
 
-    private final String unPrimedName;
-    private final String primedName;
-    private final String realName;
-    private final boolean isPrimed;
+    private final String name;
 
-    AAssignable(String unPrimedName, String primedName) {
-        this(unPrimedName, primedName, false);
-    }
-
-    AAssignable(String unPrimedName, String primedName, boolean isPrimed) {
-        this.unPrimedName = unPrimedName;
-        this.primedName = primedName;
-        this.realName = isPrimed ? primedName : unPrimedName;
-        this.isPrimed = isPrimed;
+    AAssignable(String name) {
+        this.name = name;
     }
 
     @Override
     public abstract AAssignable accept(IPrimer primer);
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public String getUnPrimedName() {
-        return unPrimedName;
-    }
-
-    public String getPrimedName() {
-        return primedName;
-    }
-
-    public boolean isPrimed() {
-        return isPrimed;
+    public String getName() {
+        return name;
     }
 
 }

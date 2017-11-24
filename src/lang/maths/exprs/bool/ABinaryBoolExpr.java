@@ -2,9 +2,10 @@ package lang.maths.exprs.bool;
 
 import lang.maths.defs.DefsContext;
 import lang.maths.exprs.AGenericTypeExpr;
-import lang.maths.exprs.arith.AVar;
 import lang.maths.exprs.arith.Const;
 import lang.maths.exprs.arith.Fun;
+import lang.maths.exprs.arith.FunVar;
+import lang.maths.exprs.arith.Var;
 import visitors.formatters.interfaces.IPrimer;
 
 import java.util.Collection;
@@ -35,8 +36,13 @@ abstract class ABinaryBoolExpr<Operand extends AGenericTypeExpr<Operand>> extend
     }
 
     @Override
-    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(left.getFunVars(defsContext), right.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

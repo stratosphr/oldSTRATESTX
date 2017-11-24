@@ -12,7 +12,7 @@ public abstract class AVarDef<Var extends AVar, Domain extends ASetExpr> extends
     protected final Var var;
 
     AVarDef(Var var, Domain domain) {
-        super(var.getRealName(), domain);
+        super(var.getName(), domain);
         this.var = var;
     }
 

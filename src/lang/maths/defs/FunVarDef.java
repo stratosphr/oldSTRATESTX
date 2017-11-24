@@ -11,7 +11,7 @@ import visitors.formatters.interfaces.ISMTFormatter;
  */
 public final class FunVarDef<Domain extends ASetExpr> extends AVarDef<FunVar, Domain> {
 
-    FunVarDef(FunVar funVar, Domain domain) {
+    public FunVarDef(FunVar funVar, Domain domain) {
         super(funVar, domain);
     }
 

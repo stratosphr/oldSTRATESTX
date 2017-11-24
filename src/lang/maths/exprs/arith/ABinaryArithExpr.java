@@ -32,8 +32,13 @@ abstract class ABinaryArithExpr<Operand extends AGenericTypeExpr<Operand>> exten
     }
 
     @Override
-    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return Stream.of(left.getVars(defsContext), right.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(left.getFunVars(defsContext), right.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

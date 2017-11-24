@@ -6,272 +6,223 @@ import lang.maths.defs.FunVarDef;
 import lang.maths.defs.VarDef;
 import lang.maths.exprs.arith.*;
 import lang.maths.exprs.bool.*;
-import visitors.formatters.interfaces.ISMTFormattable;
+import visitors.formatters.interfaces.ISMTFormatter;
 
-import java.util.*;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
- * Created by gvoiron on 17/11/17.
- * Time : 01:53
+ * Created by gvoiron on 22/11/17.
+ * Time : 20:34
  */
-public final class SMTFormatter extends GenericExprFormatter {
+public class SMTFormatter extends AFormatter implements ISMTFormatter {
 
     private final DefsContext defsContext;
     private final int foldingLimit;
-    private final LinkedHashSet<Fun> funs;
-    private LinkedHashSet<AArithExpr> quantifiedVars;
-    private boolean isVisitingBoolExpr;
 
     public SMTFormatter(DefsContext defsContext) {
         this(defsContext, 80);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public SMTFormatter(DefsContext defsContext, int foldingLimit) {
         this.defsContext = defsContext;
         this.foldingLimit = foldingLimit;
-        this.funs = new LinkedHashSet<>();
-        this.quantifiedVars = new LinkedHashSet<>();
-        this.isVisitingBoolExpr = false;
+    }
+
+    public String format(ABoolExpr expr) {
+        String formatted = "";
+        formatted += defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name) + ")")).collect(Collectors.joining());
+        formatted += defsContext.getVarsDefs().values().stream().map(varDef -> line(varDef.accept(this))).collect(Collectors.joining());
+        formatted += defsContext.getVarsDefs().values().stream().map(varDef -> line(new VarDef<>(varDef.getVar().accept(new Primer(true)), varDef.getDomain()).accept(this))).collect(Collectors.joining());
+        formatted += defsContext.getFunVarsDefs().values().stream().map(funVarDef -> line(funVarDef.accept(this))).collect(Collectors.joining());
+        formatted += defsContext.getFunVarsDefs().values().stream().map(funVarDef -> line(new FunVarDef<>(funVarDef.getVar().accept(new Primer(true)), funVarDef.getDomain()).accept(this))).collect(Collectors.joining());
+        formatted += defsContext.getFunsDefs().values().stream().map(funDef -> line(funDef.accept(this))).collect(Collectors.joining());
+        formatted += defsContext.getFunsDefs().values().stream().map(funDef -> line(new FunDef(new Var(funDef.getName()).accept(new Primer(true)).getName(), funDef.getDomain(), funDef.getCoDomain()).accept(this))).collect(Collectors.joining());
+        formatted += "(assert " + expr.accept(this) + ")";
+        return formatted;
     }
 
     private String fold(String formatted) {
-        if (formatted.replaceAll("\t", "").length() <= foldingLimit) {
-            formatted = Arrays.stream(formatted.replaceAll("\t", "").split("\n")).collect(Collectors.joining(" ")).replaceAll(" [)]", ")");
-        }
-        return formatted;
-    }
-
-    // TODO: FIX THESE TWO MESSY FUNCTIONS
-    private String formatArithExpr(String formatted) {
-        return formatted;
-    }
-
-    private String formatBoolExpr(String operator, ABoolExpr expr, List<? extends ISMTFormattable> operands) {
-        boolean wasVisitingBoolExpr = isVisitingBoolExpr;
-        if (!isVisitingBoolExpr) {
-            isVisitingBoolExpr = true;
-        }
-        String formatted;
-        if (expr instanceof AQuantifier) {
-            And funsConstraint = new And(expr.getFuns().stream().filter(fun -> ((AQuantifier) expr).getQuantifiedVarsDefs().stream().anyMatch(varDef -> fun.getParameter() instanceof Var && ((Var) fun.getParameter()).getUnPrimedName().equals(varDef.getUnPrimedName()))).map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain())).toArray(ABoolExpr[]::new));
-            ABoolExpr quantifiedExpr;
-            if (expr instanceof ForAll) {
-                quantifiedExpr = new Implies(funsConstraint, ((ForAll) expr).getExpr());
-            } else if (expr instanceof Exists) {
-                quantifiedExpr = new And(funsConstraint, ((AQuantifier) expr).getExpr());
-            } else {
-                throw new Error("Error: unhandled quantifier type \"" + expr.getClass().getSimpleName() + "\".");
-            }
-            formatted = line("(" + operator) + indentRight() + indentLine("(" + ((AQuantifier) expr).getQuantifiedVarsDefs().stream().map(varDef -> "(" + varDef.getUnPrimedName() + " Int)").collect(Collectors.joining(" ")) + ")") + indentLine(quantifiedExpr.accept(this)) + indentLeft() + indent(")");
-        } else if (operands.isEmpty()) {
-            formatted = operator;
-        } else {
-            formatted = line("(" + operator) + indentRight() + operands.stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")");
-        }
-        if (!wasVisitingBoolExpr) {
-            String oldFormatted = formatted;
-            formatted = defsContext.getConstsDefs().keySet().stream().map(name -> line("(define-fun " + name + " () Int " + defsContext.getConstsDefs().get(name).accept(this) + ")")).collect(Collectors.joining());
-            formatted += defsContext.getVarsDefs().keySet().stream().map(name -> line(defsContext.getVarsDefs().get(name).accept(this))).collect(Collectors.joining());
-            formatted += defsContext.getVarsDefs().isEmpty() && funs.isEmpty() ? "" : line();
-            formatted += defsContext.getVarsDefs().isEmpty() ? "" : line("(assert " + new And(defsContext.getVarsDefs().keySet().stream().map(name -> new InDomain(new Var(name), defsContext.getVarsDefs().get(name).getDomain())).toArray(ABoolExpr[]::new)).accept(this) + ")");
-            formatted += funs.isEmpty() ? "" : line("(assert " + new And(funs.stream().map(fun -> new InDomain(fun.getParameter(), defsContext.getFunsDefs().get(fun.getRealName()).getDomain())).toArray(ABoolExpr[]::new)).accept(this) + ")");
-            formatted += defsContext.getFunsDefs().isEmpty() ? "" : line() + defsContext.getFunsDefs().keySet().stream().map(name -> line(defsContext.getFunsDefs().get(name).accept(this))).collect(Collectors.joining());
-            formatted += defsContext.getConstsDefs().isEmpty() && defsContext.getVarsDefs().isEmpty() && defsContext.getFunsDefs().isEmpty() ? "" : line();
-            formatted += "(assert " + oldFormatted + ")";
+        String tabsReplaced = formatted.replaceAll("\t", "");
+        if (tabsReplaced.length() <= foldingLimit) {
+            formatted = Arrays.stream(tabsReplaced.split("\n")).collect(Collectors.joining(" ")).replaceAll(" [)]", ")");
         }
         return formatted;
     }
 
     @Override
     public String visit(VarDef varDef) {
-        return "(declare-fun " + varDef.getUnPrimedName() + " () Int)";
+        return "(declare-fun " + varDef.getVar().accept(this) + " () Int)";
     }
 
     @Override
     public String visit(FunVarDef funVarDef) {
-        return "(declare-fun " + funVarDef.getUnPrimedName() + " () Int)";
+        return "(declare-fun " + funVarDef.getVar().accept(this) + " () Int)";
     }
 
     @Override
     public String visit(FunDef funDef) {
         Var index = new Var("i!");
-        String formatted = line("(define-fun " + funDef.getUnPrimedName() + " ((" + index + " Int)) Int") + indentRight();
-        List<AArithExpr> domainElements = new ArrayList<>(funDef.getDomain().getElements());
-        ListIterator<AArithExpr> iterator = domainElements.listIterator(domainElements.size());
-        AArithExpr firstDomainElement = iterator.previous();
-        ArithITE arithITE = new ArithITE(new Equals(index, firstDomainElement), new Var(funDef.getUnPrimedName() + "!" + firstDomainElement), new Int(0));
-        while (iterator.hasPrevious()) {
-            AArithExpr element = iterator.previous();
-            arithITE = new ArithITE(new Equals(index, element), new Var(funDef.getUnPrimedName() + "!" + element), arithITE);
-        }
-        formatted += indentLine(arithITE.accept(this));
-        formatted += indentLeft() + ")";
+        String formatted = line("(define-fun " + funDef.getName() + " ((" + index.accept(this) + " Int)) Int");
+        formatted += indentRight() + indentLine(funDef.getDomain().getElements().descendingSet().stream().filter(o -> !o.equals(funDef.getDomain().getElements().last())).reduce(new ArithITE(new Equals(index, funDef.getDomain().getElements().last()), new FunVar(new Fun(funDef.getName(), funDef.getDomain().getElements().last())), funDef.getDomain().getElements().first()), (element1, o2) -> new ArithITE(new Equals(index, o2), new FunVar(new Fun(funDef.getName(), o2)), element1), (arithITE1, arithITE2) -> arithITE1).accept(this)) + indentLeft();
+        formatted += indent(")");
         return formatted;
     }
 
     @Override
     public String visit(Const aConst) {
-        if (!defsContext.getConstsDefs().containsKey(aConst.getName())) {
-            defsContext.addConstDef(aConst.getName(), new Int(aConst.getValue()));
-        }
-        return aConst.getName();
+        return fold(aConst.getName());
     }
 
     @Override
     public String visit(Int anInt) {
-        return formatArithExpr(anInt.getValue().toString());
+        return fold(anInt.getValue().toString());
     }
 
     @Override
     public String visit(EnumValue enumValue) {
-        return formatArithExpr(enumValue.getValue().toString());
+        return fold(new Int(enumValue.getValue()).accept(this));
     }
 
     @Override
     public String visit(Var var) {
-        /*if (var.isPrimed() && !defsContext.getVarsDefs().containsKey(var.getPrimedName())) {
-            defsContext.addDef(new VarDef<>(var.getPrimedName(), defsContext.getVarsDefs().get(var.getUnPrimedName()).getDomain()));
-        }*/
-        return formatArithExpr(var.getRealName());
+        return fold(var.getName());
     }
 
     @Override
     public String visit(FunVar funVar) {
-        /*if (funVar.isPrimed() && !defsContext.getVarsDefs().containsKey(funVar.getPrimedName())) {
-            defsContext.addDef(new VarDef<>(funVar.getPrimedName(), defsContext.getVarsDefs().get(funVar.getUnPrimedName()).getDomain()));
-        }*/
-        return formatArithExpr(funVar.getRealName());
+        return fold(funVar.getName());
     }
 
     @Override
     public String visit(Fun fun) {
-        if (fun.isPrimed() && !defsContext.getFunsDefs().containsKey(fun.getPrimedName())) {
-            defsContext.addDef(new FunDef(fun.getPrimedName(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getDomain(), defsContext.getFunsDefs().get(fun.getUnPrimedName()).getCoDomain()));
-        }
-        if (!quantifiedVars.contains(fun.getParameter())) {
-            funs.add(fun);
-        }
-        return fold(formatArithExpr("(" + fun.getRealName() + " " + fun.getParameter().accept(this) + ")"));
+        return fold("(" + fun.getName() + " " + fun.getParameter().accept(this) + ")");
     }
 
     @Override
     public String visit(Plus plus) {
-        return fold(formatArithExpr(line("(+") + indentRight() + plus.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")")));
+        System.exit(50);
+        return null;
     }
 
     @Override
     public String visit(Minus minus) {
-        return fold(formatArithExpr(line("(-") + indentRight() + minus.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")")));
+        System.exit(51);
+        return null;
     }
 
     @Override
     public String visit(Times times) {
-        return fold(formatArithExpr(line("(*") + indentRight() + times.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")")));
+        System.exit(52);
+        return null;
     }
 
     @Override
     public String visit(Div div) {
-        return fold(formatArithExpr(line("(/") + indentRight() + div.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")")));
+        System.exit(53);
+        return null;
     }
 
     @Override
     public String visit(Mod mod) {
-        return fold(formatArithExpr(line("(mod") + indentRight() + indentLine(mod.getLeft().accept(this)) + indentLine(mod.getRight().accept(this)) + indentLeft() + indent(")")));
+        System.exit(54);
+        return null;
     }
 
     @Override
     public String visit(ArithITE arithITE) {
-        return formatArithExpr(line("(ite") + indentRight() + indentLine(arithITE.getCondition().accept(this)) + indentLine(arithITE.getThenPart().accept(this)) + indentLine(arithITE.getElsePart().accept(this)) + indentLeft() + indent(")"));
+        return line("(ite") + indentRight() + indentLine(arithITE.getCondition().accept(this)) + indentLine(arithITE.getThenPart().accept(this)) + indentLine(arithITE.getElsePart().accept(this)) + indentLeft() + indent(")");
     }
 
     @Override
     public String visit(True aTrue) {
-        return formatBoolExpr("true", aTrue, new ArrayList<>());
+        System.exit(56);
+        return null;
     }
 
     @Override
     public String visit(False aFalse) {
-        return formatBoolExpr("false", aFalse, new ArrayList<>());
+        System.exit(57);
+        return null;
     }
 
     @Override
     public String visit(Not not) {
-        return fold(formatBoolExpr("not", not, Collections.singletonList(not.getOperand())));
+        System.exit(58);
+        return null;
     }
 
     @Override
     public String visit(Or or) {
-        return fold(formatBoolExpr("or", or, or.getOperands()));
+        return fold(or.getOperands().isEmpty() ? new False().accept(this) : line("(or") + indentRight() + or.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(And and) {
-        return fold(formatBoolExpr("and", and, and.getOperands()));
+        return fold(and.getOperands().isEmpty() ? new True().accept(this) : line("(and") + indentRight() + and.getOperands().stream().map(operand -> indentLine(operand.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(Equals equals) {
-        return fold(formatBoolExpr("=", equals, equals.getOperands()));
+        return fold(line("(=") + indentRight() + equals.getOperands().stream().map(expr -> indentLine(expr.accept(this))).collect(Collectors.joining()) + indentLeft() + indent(")"));
     }
 
     @Override
     public String visit(NotEquals notEquals) {
-        return new Not(new Equals(notEquals.getLeft(), notEquals.getRight())).accept(this);
+        System.exit(62);
+        return null;
     }
 
     @Override
     public String visit(LT lt) {
-        return fold(formatBoolExpr("<", lt, Arrays.asList(lt.getLeft(), lt.getRight())));
+        System.exit(63);
+        return null;
     }
 
     @Override
     public String visit(LEQ leq) {
-        return fold(formatBoolExpr("<=", leq, Arrays.asList(leq.getLeft(), leq.getRight())));
+        System.exit(64);
+        return null;
     }
 
     @Override
     public String visit(GEQ geq) {
-        return fold(formatBoolExpr(">=", geq, Arrays.asList(geq.getLeft(), geq.getRight())));
+        System.exit(65);
+        return null;
     }
 
     @Override
     public String visit(GT gt) {
-        return fold(formatBoolExpr(">", gt, Arrays.asList(gt.getLeft(), gt.getRight())));
+        System.exit(66);
+        return null;
     }
 
     @Override
     public String visit(InDomain inDomain) {
-        return inDomain.getConstraint().accept(this);
+        return fold(inDomain.getConstraint().accept(this));
     }
 
     @Override
     public String visit(Implies implies) {
-        return formatBoolExpr("=>", implies, Arrays.asList(implies.getCondition(), implies.getThenPart()));
+        System.exit(68);
+        return null;
     }
 
     @Override
     public String visit(ForAll forAll) {
-        LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
-        quantifiedVars.addAll(forAll.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getUnPrimedName())).collect(Collectors.toList()));
-        String formatted = formatBoolExpr("forall", forAll, new ArrayList<>());
-        quantifiedVars = oldQuantifiedVars;
-        return formatted;
+        System.exit(69);
+        return null;
     }
 
     @Override
     public String visit(Exists exists) {
-        LinkedHashSet<AArithExpr> oldQuantifiedVars = new LinkedHashSet<>(quantifiedVars);
-        quantifiedVars.addAll(exists.getQuantifiedVarsDefs().stream().map(varDef -> new Var(varDef.getUnPrimedName())).collect(Collectors.toList()));
-        String formatted = formatBoolExpr("exists", exists, new ArrayList<>());
-        quantifiedVars = oldQuantifiedVars;
-        return formatted;
+        System.exit(70);
+        return null;
     }
 
     @Override
     public String visit(Invariant invariant) {
-        return invariant.getExpr().accept(this);
+        return fold(invariant.getExpr().accept(this));
     }
 
 }

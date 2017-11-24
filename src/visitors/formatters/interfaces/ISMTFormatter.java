@@ -12,11 +12,11 @@ import lang.maths.exprs.bool.*;
  */
 public interface ISMTFormatter {
 
-    String visit(FunDef funDef);
-
     String visit(VarDef varDef);
 
     String visit(FunVarDef funVarDef);
+
+    String visit(FunDef funDef);
 
     String visit(Const aConst);
 

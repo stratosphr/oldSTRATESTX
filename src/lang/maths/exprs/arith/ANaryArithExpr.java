@@ -20,7 +20,7 @@ abstract class ANaryArithExpr<Operand extends AGenericTypeExpr<Operand>> extends
 
     ANaryArithExpr(Operand[] operands) {
         if (operands.length < 2) {
-            throw new Error("The minimum number of operands expected to instantiate a \"" + getClass().getSimpleName() + "\" object is 2 (only " + operands.length + " were given)");
+            throw new Error("The minimum number of operands expected to instantiate a \"" + getClass().getSimpleName() + "\" object is 2 (" + operands.length + " given).");
         }
         this.operands = Arrays.asList(operands);
     }
@@ -38,8 +38,13 @@ abstract class ANaryArithExpr<Operand extends AGenericTypeExpr<Operand>> extends
     }
 
     @Override
-    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return operands.stream().map(operand -> operand.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return operands.stream().map(operand -> operand.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

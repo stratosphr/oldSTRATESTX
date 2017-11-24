@@ -25,7 +25,12 @@ public abstract class AValue extends AArithExpr {
     public abstract AValue accept(IPrimer primer);
 
     @Override
-    public final LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public final LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
         return new LinkedHashSet<>();
     }
 

@@ -24,6 +24,16 @@ public final class Primer implements IPrimer {
         return suffix;
     }
 
+    private String apply(String name) {
+        if (isPriming) {
+            return name + "_";
+        } else if (name.endsWith("_")) {
+            return name.replaceAll("_$", "");
+        } else {
+            return name;
+        }
+    }
+
     @Override
     public Int visit(Int anInt) {
         return anInt;
@@ -41,17 +51,17 @@ public final class Primer implements IPrimer {
 
     @Override
     public Var visit(Var var) {
-        return new Var(var.getUnPrimedName(), isPriming);
+        return new Var(apply(var.getName()));
     }
 
     @Override
     public FunVar visit(FunVar funVar) {
-        return new FunVar(funVar.getFunName(), funVar.getParameter(), isPriming);
+        return new FunVar(funVar.getFun().accept(this));
     }
 
     @Override
     public Fun visit(Fun fun) {
-        return new Fun(fun.getUnPrimedName(), isVisitingInvariant ? fun.getParameter().prime() : fun.getParameter(), isPriming);
+        return new Fun(apply(fun.getName()), isVisitingInvariant ? fun.getParameter().prime() : fun.getParameter());
     }
 
     @Override

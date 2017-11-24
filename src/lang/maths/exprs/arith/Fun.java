@@ -23,11 +23,7 @@ public final class Fun extends AAssignable {
     private final AArithExpr parameter;
 
     public Fun(String name, AArithExpr parameter) {
-        this(name, parameter, false);
-    }
-
-    public Fun(String name, AArithExpr parameter, boolean isPrimed) {
-        super(name, name + Primer.getSuffix(), isPrimed);
+        super(name);
         this.parameter = parameter;
     }
 
@@ -52,8 +48,13 @@ public final class Fun extends AAssignable {
     }
 
     @Override
-    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
-        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(getUnPrimedName()).getDomain().getElements().stream().map(element -> new Fun(getUnPrimedName(), element, isPrimed()).getFunVar()).toArray(FunVar[]::new)), parameter.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return parameter.getVars(defsContext);
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(Arrays.asList(defsContext.getFunsDefs().get(accept(new Primer(false)).getName()).getDomain().getElements().stream().map(element -> new FunVar(this)).toArray(FunVar[]::new)), parameter.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
@@ -68,7 +69,7 @@ public final class Fun extends AAssignable {
     @Override
     public int compareTo(AObject object) {
         if (object instanceof Fun) {
-            int comparison = getRealName().compareTo(((Fun) object).getUnPrimedName());
+            int comparison = getName().compareTo(((Fun) object).getName());
             if (comparison == 0) {
                 return parameter.compareTo(((Fun) object).getParameter());
             } else {
@@ -79,8 +80,8 @@ public final class Fun extends AAssignable {
         }
     }
 
-    private FunVar getFunVar() {
-        return new FunVar(getUnPrimedName(), parameter.toString(), isPrimed());
+    public FunVar getFunVar() {
+        return new FunVar(this);
     }
 
 }

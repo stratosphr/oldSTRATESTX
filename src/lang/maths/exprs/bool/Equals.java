@@ -13,6 +13,9 @@ public final class Equals extends ANaryBoolExpr<AArithExpr> {
 
     public Equals(AArithExpr... operands) {
         super(operands);
+        if (operands.length < 2) {
+            throw new Error("The minimum number of operands expected to instantiate a \"" + getClass().getSimpleName() + "\" object is 2 (" + operands.length + " given).");
+        }
     }
 
     @Override

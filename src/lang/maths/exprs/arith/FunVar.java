@@ -1,7 +1,6 @@
 package lang.maths.exprs.arith;
 
 import lang.maths.defs.DefsContext;
-import visitors.formatters.Primer;
 import visitors.formatters.interfaces.IObjectFormatter;
 import visitors.formatters.interfaces.IPrimer;
 import visitors.formatters.interfaces.ISMTFormatter;
@@ -15,17 +14,11 @@ import java.util.LinkedHashSet;
  */
 public final class FunVar extends AVar {
 
-    private final String funName;
-    private final String parameter;
+    private final Fun fun;
 
-    public FunVar(String funName, String parameter) {
-        this(funName, parameter, false);
-    }
-
-    public FunVar(String funName, String parameter, boolean isPrimed) {
-        super(funName + "!" + parameter, funName + Primer.getSuffix() + "!" + parameter, isPrimed);
-        this.funName = funName;
-        this.parameter = parameter;
+    public FunVar(Fun fun) {
+        super(fun.getName() + "!" + fun.getParameter());
+        this.fun = fun;
     }
 
     @Override
@@ -49,7 +42,12 @@ public final class FunVar extends AVar {
     }
 
     @Override
-    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
         return new LinkedHashSet<>(Collections.singletonList(this));
     }
 
@@ -58,12 +56,8 @@ public final class FunVar extends AVar {
         return new LinkedHashSet<>();
     }
 
-    public String getFunName() {
-        return funName;
-    }
-
-    public String getParameter() {
-        return parameter;
+    public Fun getFun() {
+        return fun;
     }
 
 }

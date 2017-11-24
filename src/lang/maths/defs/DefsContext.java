@@ -1,6 +1,6 @@
 package lang.maths.defs;
 
-import lang.maths.exprs.arith.FunVar;
+import lang.maths.exprs.arith.Fun;
 import lang.maths.exprs.arith.Int;
 import lang.maths.exprs.arith.Var;
 
@@ -39,37 +39,37 @@ public final class DefsContext {
     }
 
     public void addDef(VarDef varDef) {
-        if (varsDefs.containsKey(varDef.getVar().getUnPrimedName()) && !varsDefs.get(varDef.getUnPrimedName()).equals(varDef)) {
-            throw new Error("Error: variable \"" + varDef.getVar() + "\" was already defined in this scope (" + varsDefs.get(varDef.getVar().getUnPrimedName()) + ".");
+        if (varsDefs.containsKey(varDef.getVar().getName()) && !varsDefs.get(varDef.getName()).equals(varDef)) {
+            throw new Error("Error: variable \"" + varDef.getVar() + "\" was already defined in this scope (" + varsDefs.get(varDef.getVar().getName()) + ".");
         }
         if (varDef.getDomain().isEmpty(this)) {
             throw new Error("Error: the domain of variable \"" + varDef.getVar() + "\" cannot be empty.");
         }
-        varsDefs.put(varDef.getVar().getUnPrimedName(), varDef);
+        varsDefs.put(varDef.getVar().getName(), varDef);
     }
 
     private void addDef(FunVarDef funVarDef) {
-        if (funVarsDefs.containsKey(funVarDef.getVar().getUnPrimedName()) && !funVarsDefs.get(funVarDef.getUnPrimedName()).equals(funVarDef)) {
-            throw new Error("Error: variable \"" + funVarDef.getVar() + "\" was already defined in this scope (" + funVarsDefs.get(funVarDef.getVar().getUnPrimedName()) + ".");
+        if (funVarsDefs.containsKey(funVarDef.getVar().getName()) && !funVarsDefs.get(funVarDef.getName()).equals(funVarDef)) {
+            throw new Error("Error: variable \"" + funVarDef.getVar() + "\" was already defined in this scope (" + funVarsDefs.get(funVarDef.getVar().getName()) + ".");
         }
         if (funVarDef.getDomain().isEmpty(this)) {
             throw new Error("Error: the domain of variable \"" + funVarDef.getVar() + "\" cannot be empty.");
         }
-        funVarsDefs.put(funVarDef.getVar().getUnPrimedName(), funVarDef);
+        funVarsDefs.put(funVarDef.getVar().getName(), funVarDef);
     }
 
     public void addDef(FunDef funDef) {
-        if (funsDefs.containsKey(funDef.getUnPrimedName()) && !funsDefs.get(funDef.getUnPrimedName()).equals(funDef)) {
-            throw new Error("Error: function \"" + funDef.getUnPrimedName() + "\" was already defined in this scope.");
+        if (funsDefs.containsKey(funDef.getName()) && !funsDefs.get(funDef.getName()).equals(funDef)) {
+            throw new Error("Error: function \"" + funDef.getName() + "\" was already defined in this scope.");
         }
         if (funDef.getDomain().isEmpty(this)) {
-            throw new Error("Error: the domain of function \"" + funDef.getUnPrimedName() + "\" cannot be empty.");
+            throw new Error("Error: the domain of function \"" + funDef.getName() + "\" cannot be empty.");
         }
         if (funDef.getCoDomain().isEmpty(this)) {
-            throw new Error("Error: the co-domainA of function \"" + funDef.getUnPrimedName() + "\" cannot be empty.");
+            throw new Error("Error: the co-domainA of function \"" + funDef.getName() + "\" cannot be empty.");
         }
-        funDef.getDomain().getElements().forEach(element -> addDef(new FunVarDef<>(new FunVar(funDef.getUnPrimedName(), element.toString()), funDef.getCoDomain())));
-        funsDefs.put(funDef.getUnPrimedName(), funDef);
+        funDef.getDomain().getElements().forEach(element -> addDef(new FunVarDef<>(new Fun(funDef.getName(), element).getFunVar(), funDef.getDomain())));
+        funsDefs.put(funDef.getName(), funDef);
     }
 
     public LinkedHashMap<String, Int> getConstsDefs() {

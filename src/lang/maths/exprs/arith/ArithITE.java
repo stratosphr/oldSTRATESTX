@@ -48,8 +48,13 @@ public final class ArithITE extends AArithExpr {
     }
 
     @Override
-    public LinkedHashSet<AVar> getVars(DefsContext defsContext) {
+    public LinkedHashSet<Var> getVars(DefsContext defsContext) {
         return Stream.of(condition.getVars(defsContext), thenPart.getVars(defsContext), elsePart.getVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public LinkedHashSet<FunVar> getFunVars(DefsContext defsContext) {
+        return Stream.of(condition.getFunVars(defsContext), thenPart.getFunVars(defsContext), elsePart.getFunVars(defsContext)).flatMap(Collection::stream).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

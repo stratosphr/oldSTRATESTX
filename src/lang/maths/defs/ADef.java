@@ -10,16 +10,16 @@ import visitors.formatters.interfaces.ISMTFormattable;
  */
 public abstract class ADef<Domain extends ASetExpr> extends AObject implements ISMTFormattable {
 
-    private String unPrimedName;
+    private final String name;
     final Domain domain;
 
-    ADef(String unPrimedName, Domain domain) {
-        this.unPrimedName = unPrimedName;
+    ADef(String name, Domain domain) {
+        this.name = name;
         this.domain = domain;
     }
 
-    public String getUnPrimedName() {
-        return unPrimedName;
+    public String getName() {
+        return name;
     }
 
     public Domain getDomain() {
